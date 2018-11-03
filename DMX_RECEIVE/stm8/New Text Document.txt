@@ -1,0 +1,212 @@
+#include "dmx512.h"
+
+
+uint8_t dmx512_get_data(int i) {
+    return input_data[i];
+}
+void dmx512_set_input(int i, uint8_t value) {
+    input_data[i] = value;
+}
+void dmx512_clear_input(void) {
+    memset(input_data, 0, NUMBER_OUTPUTS);
+}
+
+//  f_counter = f_master / prescaler;
+//  f_timer = f_counter / (period + 1);
+void dmx512_rec_init(void) {
+    dmx512_exti_enable();
+ /*  TIM1_DeInit();
+    TIM1_TimeBaseInit(1, TIM1_COUNTERMODE_UP, 0xFFFF, 0);
+    TIM1_OC1Init(TIM1_OCMODE_PWM1, TIM1_OUTPUTSTATE_ENABLE, TIM1_OUTPUTNSTATE_DISABLE, 0x7FFF, TIM1_OCPOLARITY_HIGH, TIM1_OCNPOLARITY_HIGH, TIM1_OCIDLESTATE_RESET, TIM1_OCNIDLESTATE_RESET);
+    TIM1_OC1PreloadConfig(DISABLE);*/
+
+    UART1_DeInit();
+    UART1_Init(UART_BAUD_RATE, UART1_WORDLENGTH_8D, UART1_STOPBITS_2, UART1_PARITY_NO, UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_RX_ENABLE);
+    UART1_ITConfig(UART1_IT_RXNE_OR, ENABLE);
+    UART1_ClearITPendingBit(UART1_IT_RXNE);
+    dmx512_clear_input();
+    UART1_Cmd(ENABLE);
+}
+
+void dmx512_set_start_addr(int addr) {
+    start_addr = addr;
+}
+
+uint16_t dmx512_get_start_addr(void) {
+    return start_addr;
+}
+
+void dmx512_uart_disable(void) {
+    UART1_Cmd(DISABLE);
+    UART1_ITConfig(UART1_IT_RXNE_OR,DISABLE);
+}
+void dmx512_uart_enable(void) {
+    UART1_Cmd(ENABLE);
+    UART1_ITConfig(UART1_IT_RXNE_OR,ENABLE);
+}
+void dmx512_exti_enable(void) {
+    GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_IN_FL_IT);
+    GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_IN_FL_IT);
+
+    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOB, EXTI_SENSITIVITY_FALL_ONLY);
+    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOC, EXTI_SENSITIVITY_RISE_ONLY);
+}
+
+void dmx512_exti_disable(void) {
+    GPIO_Init(GPIOB, GPIO_PIN_4, GPIO_MODE_IN_FL_NO_IT);
+    GPIO_Init(GPIOC, GPIO_PIN_3, GPIO_MODE_IN_FL_NO_IT);
+}
+
+
+void dmx512_handler_falling()
+{
+   if( GPIO_ReadInputPin(GPIOB,GPIO_PIN_4)==RESET)
+  {
+ 
+    if (phase == MAB) 
+        {
+            TIM4_Cmd(DISABLE);
+            mab_time=TIM4_GetCounter()+ TIM4_ovf_val*256;
+             TIM4_ovf_val=0;
+            if (mab_time > MABMIN && mab_time < MABMAX) 
+              {
+                start_flag = 1;
+                phase = TRANSFER;
+                dmx512_exti_disable();
+                UART1->DR=0;
+               // UART1_Cmd(ENABLE);
+             //   UART1_ReceiveData8();
+                UART1_ITConfig(UART1_IT_RXNE_OR, ENABLE);
+              } 
+            else 
+              {
+                //phase = WAITING;
+                TIM4_SetCounter(0); 
+                TIM4_ovf_val=0;
+                phase = BREAKTIME;
+                UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+                UART1_Cmd(DISABLE);
+                TIM4_Cmd(ENABLE);
+              }
+            
+        }
+      else
+        {
+          UART1_Cmd(DISABLE);
+          UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+          TIM4_SetCounter(0);  
+          TIM4_ovf_val=0;
+          TIM4_Cmd(ENABLE);
+          phase = BREAKTIME;
+          return;
+        }
+  }
+ 
+}
+
+
+void dmx512_handler_rising()
+{
+  if( GPIO_ReadInputPin(GPIOC,GPIO_PIN_3)!=RESET)
+ {
+          
+           if (phase == BREAKTIME)
+          {
+            TIM4_Cmd(DISABLE);
+            break_time=TIM4_GetCounter()+ TIM4_ovf_val*256;
+            if (break_time >= BREAKMIN && break_time <= BREAKMAX)
+            { 
+            /*  phase = MAB;
+              UART1_Cmd(ENABLE);
+              UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+              TIM4_SetCounter(0);
+              ovf=0;
+              TIM4_Cmd(ENABLE);
+              return ;*/
+                 start_flag = 1;
+                phase = TRANSFER;
+                dmx512_exti_disable();
+                UART1_Cmd(ENABLE);
+                UART1_ReceiveData8();
+                UART1_ITConfig(UART1_IT_RXNE_OR, ENABLE);
+              
+            }
+            else 
+            {
+              phase = WAITING;
+              byte_count =0;
+              TIM4_SetCounter(0);
+              TIM4_ovf_val=0;
+              TIM4_Cmd(ENABLE);
+            }
+          }
+           else
+          {
+            UART1_Cmd(DISABLE);
+            UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+            phase=WAITING;
+            TIM4_SetCounter(0);
+            TIM4_ovf_val=0;
+            TIM4_Cmd(ENABLE);
+          }
+          /*  dmx512_rec_init();
+            dmx512_uart_disable();
+            TIM4_DeInit();
+            TIM4_TimeBaseInit(TIM4_PRESCALER_16,255);
+            TIM4_SetCounter(0);*/
+  }
+}
+void dmx512_handler_rx_uart()
+{
+   uint8_t in;
+   uint16_t data_count=0,channel=dmx512_get_start_addr();
+   if(start_flag==0)
+   {
+      UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+      UART1_Cmd(DISABLE);
+      TIM4_Cmd(ENABLE);
+      TIM4_SetCounter(0);
+      TIM4_ovf_val=0;
+      dmx512_exti_enable(); 
+      byte_count=0;
+      return;
+   }
+      in = UART1_ReceiveData8();       
+   while(byte_count < channel)  
+   {
+     //in = UART1_ReceiveData8();
+      while (UART1_GetFlagStatus(UART1_FLAG_RXNE) == RESET)
+          {
+           dmx_timeout_val++;
+              if(dmx_timeout_val>DEF_TIMEOUT)
+                goto end;
+          }
+      in = UART1_ReceiveData8();
+      byte_count++;
+   }
+   while(byte_count < (channel+LEN_DATA))   
+  {
+      dmx512_set_input(data_count,in);
+      while (UART1_GetFlagStatus(UART1_FLAG_RXNE) == RESET)
+      {
+       dmx_timeout_val++;
+       if(dmx_timeout_val>DEF_TIMEOUT)
+            goto end;
+      }
+      in = UART1_ReceiveData8();
+      byte_count++;
+      data_count++;
+  }
+ end: byte_count = 0;
+      dmx_timeout_val=0;
+      start_flag=0;
+      phase=WAITING;      
+      UART1_Cmd(DISABLE);
+      UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
+     // mab_time=0;
+     // break_time=0;
+      TIM4_Cmd(ENABLE);
+      TIM4_SetCounter(0); 
+      TIM4_ovf_val=0;
+      dmx512_exti_enable(); 
+}
