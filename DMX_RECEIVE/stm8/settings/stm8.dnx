@@ -49,7 +49,7 @@
         <MultiCoreRunAll>1</MultiCoreRunAll>
     </Simulator>
     <DebugChecksum>
-        <Checksum>146238614</Checksum>
+        <Checksum>1824155219</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -62,6 +62,7 @@
         <Fmt1>uint8_t[2]	3	0</Fmt1>
         <Fmt2>uint8_t[3]	3	0</Fmt2>
         <Fmt3>uint8_t[4]	3	0</Fmt3>
+        <Fmt4>uint8_t[6]	3	0</Fmt4>
     </array_types>
     <watch_formats>
         <Fmt0>{W}42:clk	3	0</Fmt0>
@@ -85,7 +86,7 @@
         <LogFile>_ ""</LogFile>
     </TermIOLog>
     <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\main.c}.88.2" 0 0 0 0 "" 0 ""</Bp0>
+        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\main.c}.86.2" 0 0 0 0 "" 0 ""</Bp0>
         <Bp1>_ "STD_CODE" "{C:\Users\nhocc\Desktop\stm8s_it.c}.479.1" 0 0 0 0 "" 0 ""</Bp1>
         <Bp2>_ "STD_CODE" "{C:\Users\nhocc\Desktop\stm8s_it.c}.479.1" 0 0 0 0 "" 0 ""</Bp2>
         <Bp3>_ "STD_DATA" "while" 0 0 0 3 0 "" 0 ""</Bp3>

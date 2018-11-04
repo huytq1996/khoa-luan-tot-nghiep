@@ -23,9 +23,9 @@ param([String]$debugfile = "");
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0_2\common\bin\cspybat" -f "C:\Users\nhocc\Desktop\anything\GIT DA1\DA1\stm8\settings\stm8.Debug.general.xcl" --backend -f "C:\Users\nhocc\Desktop\anything\GIT DA1\DA1\stm8\settings\stm8.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0_2\common\bin\cspybat" -f "C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\settings\stm8.Debug.general.xcl" --backend -f "C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\settings\stm8.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0_2\common\bin\cspybat" -f "C:\Users\nhocc\Desktop\anything\GIT DA1\DA1\stm8\settings\stm8.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\nhocc\Desktop\anything\GIT DA1\DA1\stm8\settings\stm8.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0_2\common\bin\cspybat" -f "C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\settings\stm8.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\settings\stm8.Debug.driver.xcl" 
 }

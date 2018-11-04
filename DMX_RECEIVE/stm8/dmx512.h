@@ -8,7 +8,7 @@
 #define DMX_ADD_VAL start_addr
 
 
-#define LEN_DATA 3
+#define LEN_DATA 6
 #define WAITING 0
 #define BREAKTIME 1
 #define MAB 2

@@ -146,7 +146,7 @@ void dmx512_handler_rising()
 void dmx512_handler_rx_uart()
 {
    uint8_t in;
-   uint16_t data_count=0,channel=dmx512_get_start_addr();
+   uint16_t data_count=0,channel=CHANNEL;
    if(start_flag==0)
    {
       UART1_ITConfig(UART1_IT_RXNE_OR, DISABLE);
