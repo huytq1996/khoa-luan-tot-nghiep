@@ -7,8 +7,10 @@
 #define UART_BAUD_RATE 250000
 #define DMX_ADD_VAL start_addr
 
-
-#define LEN_DATA 6
+#define color_green     TIM2->CCR1L  
+#define color_red       TIM2->CCR2L  
+#define color_blue      TIM2->CCR3L  
+#define LEN_DATA 5
 #define WAITING 0
 #define BREAKTIME 1
 #define MAB 2
@@ -28,8 +30,8 @@ static volatile int dmx_timeout_val = 0;
 static volatile uint8_t phase = WAITING;
 static volatile uint32_t break_time, mab_time = 0;
 static int start_addr;
-static uint8_t input_data[LEN_DATA];
 
+static volatile uint16_t v_UCLN;
 void dmx512_set_input(int i, uint8_t value);
 void dmx512_clear_input(void);
 void dmx512_rec_init(void);
@@ -53,4 +55,7 @@ void dmx512_clk_config(void);
 uint8_t UART1_Read_Char();
 void dmx512_init_gpio_sw();
 uint16_t dmx512_set_and_read_channel();
+void dmx512_IT_timer1();
+uint16_t UCLN(uint16_t a,uint16_t b);
+void dmx512_tim1_init();
 #endif

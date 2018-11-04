@@ -1,6 +1,6 @@
 #include "dmx512.h"
 
-
+ extern uint8_t input_data[LEN_DATA];
 uint8_t dmx512_get_data(int i) {
     return input_data[i];
 }
@@ -8,17 +8,14 @@ void dmx512_set_input(int i, uint8_t value) {
     input_data[i] = value;
 }
 void dmx512_clear_input(void) {
-    memset(input_data, 0, LEN_DATA);
+    memset((uint8_t*)input_data, 0, LEN_DATA);
 }
 
 //  f_counter = f_master / prescaler;
 //  f_timer = f_counter / (period + 1);
 void dmx512_rec_init(void) {
     dmx512_exti_enable();
- /*  TIM1_DeInit();
-    TIM1_TimeBaseInit(1, TIM1_COUNTERMODE_UP, 0xFFFF, 0);
-    TIM1_OC1Init(TIM1_OCMODE_PWM1, TIM1_OUTPUTSTATE_ENABLE, TIM1_OUTPUTNSTATE_DISABLE, 0x7FFF, TIM1_OCPOLARITY_HIGH, TIM1_OCNPOLARITY_HIGH, TIM1_OCIDLESTATE_RESET, TIM1_OCNIDLESTATE_RESET);
-    TIM1_OC1PreloadConfig(DISABLE);*/
+
 
     UART1_DeInit();
     UART1_Init(UART_BAUD_RATE, UART1_WORDLENGTH_8D, UART1_STOPBITS_2, UART1_PARITY_NO, UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_RX_ENABLE);
@@ -215,7 +212,17 @@ void dmx512_tim2_config(uint8_t ch1_pw, uint8_t ch2_pw, uint8_t ch3_pw) {
   TIM2_Cmd(ENABLE);
   
 }
-
+void dmx512_tim1_init()
+{
+    TIM1_DeInit();
+    CLK_PeripheralClockConfig(CLK_PERIPHERAL_TIMER1,ENABLE);
+    TIM1_TimeBaseInit(15999, TIM1_COUNTERMODE_UP, 3500, 0);
+    TIM1_ARRPreloadConfig(ENABLE);
+    TIM1_ITConfig(TIM1_IT_UPDATE,ENABLE);
+    TIM1_ClearFlag(TIM1_FLAG_UPDATE);
+    TIM1_Cmd(ENABLE);
+    
+}
 void dmx512_pwm_refesh(uint8_t *data) {
   TIM2->CCR1H = 0;
   TIM2->CCR1L = data[0];
@@ -275,3 +282,98 @@ uint16_t dmx512_set_and_read_channel()
   return CHANNEL;
                 
 }
+uint16_t UCLN(uint16_t a,uint16_t b)
+{
+  if(a==0&&b==0)
+  {
+    v_UCLN=0;
+    return 0;
+  }
+    if(a==0&&b!=0)
+    {
+      v_UCLN=b;
+        return b;
+    }
+      if(a!=0&&b==0)
+      {
+        v_UCLN=a;
+        return a;
+      }
+    while ( a != b)
+    {
+        if (a > b)
+            a = a - b;
+        else
+            b = b - a;
+    }
+    v_UCLN=a;
+    return a;
+}
+void dmx512_blink()
+{
+  static uint8_t state=0;
+  if(state==1)
+  {
+    color_red=0;
+    color_green=0;
+    color_blue=0;
+    state=0;
+  }
+  else
+  {
+    color_red=input_data[0];
+    color_green=input_data[1];
+    color_blue=input_data[2];
+    state=1;
+  }
+}
+void dmx512_fade()
+{
+  
+  if(color_red<=input_data[0]&&color_red<251)
+  {
+    color_red+=5;
+  }
+  else
+  {
+    color_red=0;
+  } 
+   if(color_green<=input_data[1]&&color_green<251)
+  {
+  color_green+=5;
+  }
+    else
+  {
+    color_green=0;
+  } 
+   if(color_blue<=input_data[2]&&color_blue<251)
+  {
+  color_blue+=5;
+  }
+    else
+  {
+    color_blue=0;
+  } 
+}
+ void dmx512_IT_timer1()
+ {
+   static uint8_t blink=0,x;
+   static uint8_t fade=0;
+   blink++;
+   fade++;
+   x=(((uint16_t)input_data[3]*12)/v_UCLN);
+   if(input_data[3]!=0&&blink>=x)
+   {
+  //  TIM1_SetAutoreload()
+     blink=0;
+     dmx512_blink();
+   }
+      x=(((uint16_t)input_data[4]*12)/v_UCLN);
+   if(input_data[4]!=0&&fade>=x)
+   {
+     fade=0;
+   //  TIM1_SetAutoreload()
+     dmx512_fade();
+   }
+   TIM1_ClearITPendingBit(TIM1_IT_UPDATE);
+ }

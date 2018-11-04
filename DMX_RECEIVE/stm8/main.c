@@ -1,6 +1,6 @@
 #include "main.h"
 
-
+volatile uint8_t input_data[LEN_DATA];
  uint8_t j=0;
 
 void delay_us(uint32_t x)
@@ -36,20 +36,29 @@ int main(void) {
   enableInterrupts();
   xclk=CLK_GetClockFreq();
   dmx512_init_gpio_sw();
+  dmx512_tim1_init();
   do
   {
     xclk=dmx512_set_and_read_channel();
   }
   while(!(xclk<512&&xclk>=0));
   
-    
+
+    input_data[0]=255;
+  input_data[1]=255;
+    input_data[2]=255;
+    input_data[3]=200;
+    input_data[4]=0;
 
   while(1)
   {
  
-    TIM2->CCR1L=dmx512_get_data(1);
+    TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
+  //  TIM1_SetCounter(0);
+     TIM1_ClearFlag(TIM1_FLAG_UPDATE);
+ /*   TIM2->CCR1L=dmx512_get_data(1);
     TIM2->CCR2L=dmx512_get_data(0);
-    TIM2->CCR3L=dmx512_get_data(2);
+    TIM2->CCR3L=dmx512_get_data(2);*/
    /* TIM2_SetCompare1(255-j);
     TIM2_SetCompare2(j);
     TIM2_SetCompare3(20);
