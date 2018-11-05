@@ -49,7 +49,7 @@
         <MultiCoreRunAll>1</MultiCoreRunAll>
     </Simulator>
     <DebugChecksum>
-        <Checksum>2882384541</Checksum>
+        <Checksum>2130501563</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -89,12 +89,13 @@
         <LogFile>_ ""</LogFile>
     </TermIOLog>
     <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\main.c}.95.2" 0 0 0 0 "" 0 ""</Bp0>
+        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\main.c}.94.2" 0 0 0 0 "" 0 ""</Bp0>
         <Bp1>_ "STD_CODE" "{C:\Users\nhocc\Desktop\stm8s_it.c}.479.1" 0 0 0 0 "" 0 ""</Bp1>
         <Bp2>_ "STD_CODE" "{C:\Users\nhocc\Desktop\stm8s_it.c}.479.1" 0 0 0 0 "" 0 ""</Bp2>
         <Bp3>_ "STD_DATA" "while" 0 0 0 3 0 "" 0 ""</Bp3>
         <Bp4>_ "STD_CODE" "{$PROJ_DIR$\..\STM8S_StdPeriph_Driver\src\stm8s_clk.c}.594.3" 0 0 0 0 "" 0 ""</Bp4>
-        <Count>5</Count>
+        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\main.c}.68.7" 1 0 0 0 "" 0 ""</Bp5>
+        <Count>6</Count>
     </Breakpoints>
     <Aliases>
         <Count>0</Count>

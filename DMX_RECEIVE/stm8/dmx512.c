@@ -1,5 +1,5 @@
 #include "dmx512.h"
-
+volatile uint16_t v_UCLN;
  extern uint8_t input_data[LEN_DATA];
 uint8_t dmx512_get_data(int i) {
     return input_data[i];
@@ -278,7 +278,7 @@ uint16_t dmx512_set_and_read_channel()
   ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_7)))<<0;
  // ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_1)))<<0;
  // ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_2)))<<7;
-  CHANNEL=(~ch)&0x7F;
+  CHANNEL=((~ch)&0x7F);
   return CHANNEL;
                 
 }
@@ -329,50 +329,98 @@ void dmx512_blink()
 }
 void dmx512_fade()
 {
-  
-  if(color_red<=input_data[0]&&color_red<251)
+  static uint8_t state_r=1,state_g=1,state_b=1;
+  if(state_r==1)
   {
-    color_red+=5;
+    if(color_red>=input_data[0]-resolution)
+      {
+        state_r=0;
+        color_red=input_data[0];
+      }
+    else  
+    {
+        color_red+=resolution;
+    }
   }
   else
   {
-    color_red=0;
+    if(color_red<=resolution)
+      {
+        state_r=1;
+        color_red=0;
+      }
+    else  
+    {
+        color_red-=resolution;
+    }
   } 
-   if(color_green<=input_data[1]&&color_green<251)
+  if(state_g==1)
   {
-  color_green+=5;
+    if(color_green>=input_data[1]-resolution)
+      {
+        state_g=0;
+        color_green=input_data[1];
+      }
+    else  
+    {
+        color_green+=resolution;
+    }
   }
-    else
+  else
   {
-    color_green=0;
+    if(color_green<=resolution)
+      {
+        state_g=1;
+        color_green=0;
+      }
+    else  
+    {
+        color_green-=resolution;
+    }
   } 
-   if(color_blue<=input_data[2]&&color_blue<251)
+  if(state_b==1)
   {
-  color_blue+=5;
+    if(color_blue>=input_data[2]-resolution)
+      {
+        state_b=0;
+        color_blue=input_data[2];
+      }
+    else  
+    {
+        color_blue+=resolution;
+    }
   }
-    else
+  else
   {
-    color_blue=0;
+    if(color_blue<=resolution)
+      {
+        state_b=1;
+        color_blue=0;
+      }
+    else  
+    {
+        color_blue-=resolution;
+    }
   } 
+ 
 }
  void dmx512_IT_timer1()
  {
-   static uint8_t blink=0,x;
+   static uint8_t blink=0;
+   uint8_t x;
    static uint8_t fade=0;
    blink++;
    fade++;
    x=(((uint16_t)input_data[3]*12)/v_UCLN);
    if(input_data[3]!=0&&blink>=x)
    {
-  //  TIM1_SetAutoreload()
      blink=0;
      dmx512_blink();
    }
-      x=(((uint16_t)input_data[4]*12)/v_UCLN);
+   x=(((uint16_t)input_data[4]*4)/v_UCLN);
    if(input_data[4]!=0&&fade>=x)
    {
      fade=0;
-   //  TIM1_SetAutoreload()
      dmx512_fade();
    }
    TIM1_ClearITPendingBit(TIM1_IT_UPDATE);

@@ -6,7 +6,7 @@
 /* Private macro -------------------------------------------------------------*/
 #define UART_BAUD_RATE 250000
 #define DMX_ADD_VAL start_addr
-
+#define resolution      3
 #define color_green     TIM2->CCR1L  
 #define color_red       TIM2->CCR2L  
 #define color_blue      TIM2->CCR3L  
@@ -29,9 +29,9 @@ static volatile int TIM4_ovf_val = 0;
 static volatile int dmx_timeout_val = 0;
 static volatile uint8_t phase = WAITING;
 static volatile uint32_t break_time, mab_time = 0;
-static int start_addr;
+static uint8_t start_addr;
 
-static volatile uint16_t v_UCLN;
+
 void dmx512_set_input(int i, uint8_t value);
 void dmx512_clear_input(void);
 void dmx512_rec_init(void);

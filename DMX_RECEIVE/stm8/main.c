@@ -20,9 +20,10 @@ void delay_us(uint32_t x)
            nop();
      }
 }
-uint32_t xclk=0;
+
 
 int main(void) {
+  uint16_t xclk=0;
   dmx512_clk_config();
   dmx512_tim2_config(255,255 , 255);
   dmx512_rec_init();
@@ -34,41 +35,39 @@ int main(void) {
   TIM4_ITConfig(TIM4_IT_UPDATE,ENABLE); 
   TIM4_Cmd(DISABLE);
   enableInterrupts();
-  xclk=CLK_GetClockFreq();
   dmx512_init_gpio_sw();
   dmx512_tim1_init();
   do
   {
     xclk=dmx512_set_and_read_channel();
   }
-  while(!(xclk<512&&xclk>=0));
+  while(!((xclk<512)&&(xclk>=0)));
   
 
-    input_data[0]=255;
+  input_data[0]=255;
   input_data[1]=255;
-    input_data[2]=255;
-    input_data[3]=200;
-    input_data[4]=0;
-
+  input_data[2]=255;
+  input_data[3]=0;
+  input_data[4]=10;
+  uint8_t  input_before[2]={0,0};
   while(1)
   {
- 
-    TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
-  //  TIM1_SetCounter(0);
-     TIM1_ClearFlag(TIM1_FLAG_UPDATE);
- /*   TIM2->CCR1L=dmx512_get_data(1);
-    TIM2->CCR2L=dmx512_get_data(0);
-    TIM2->CCR3L=dmx512_get_data(2);*/
-   /* TIM2_SetCompare1(255-j);
-    TIM2_SetCompare2(j);
-    TIM2_SetCompare3(20);
-    
-    
-    j=j+1;
-    if(j==255)
-      j=0;*/
-    //xclk=dmx512_set_and_read_channel();
-  // GPIO_WriteReverse(GPIOB,GPIO_PIN_5);
+    if(input_data[3]!=0 || input_data[4]!=0)
+    {
+      if(input_before[0]!=input_data[3]||input_before[1]!=input_data[4])
+      {
+        input_before[0]=input_data[3];
+        input_before[1]=input_data[4];
+        TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
+        TIM1_ClearFlag(TIM1_FLAG_UPDATE);
+      }
+    }
+    else
+    {
+      color_red=input_data[0];
+      color_green=input_data[1];
+      color_blue=input_data[2];
+    }
   }
 }
  
