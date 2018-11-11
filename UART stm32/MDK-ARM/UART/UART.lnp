@@ -9,6 +9,7 @@
 "uart\dmx-handle.o"
 "uart\dmx-it.o"
 "uart\eeprom.o"
+"uart\lcd.o"
 "uart\startup_stm32f407xx.o"
 "uart\stm32f4xx_hal_tim_ex.o"
 "uart\stm32f4xx_hal_dma_ex.o"
@@ -27,6 +28,7 @@
 "uart\stm32f4xx_hal_uart.o"
 "uart\stm32f4xx_hal_adc.o"
 "uart\stm32f4xx_hal_adc_ex.o"
+"uart\stm32f4xx_hal_i2c.o"
 --library_type=microlib --strict --scatter "UART\UART.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

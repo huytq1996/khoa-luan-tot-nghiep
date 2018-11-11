@@ -20,8 +20,18 @@
 #define DMX_NUMBER_SCANNER 16
 #define DMX_NUMBER_SET 5
 #define DMX_START_CODE 0
-#define DMX_TX_GPIO_Port GPIOD
-#define DMX_TX_Pin GPIO_PIN_10
+#define DMX_TX_GPIO_Port GPIOB
+#define DMX_TX_Pin GPIO_PIN_4
+#define DMX_ADC_C1_Port GPIOA
+#define DMX_ADC_C1_Pin GPIO_PIN_0
+#define DMX_ADC_C2_Port GPIOA
+#define DMX_ADC_C2_Pin GPIO_PIN_1
+#define DMX_ADC_C3_Port GPIOA
+#define DMX_ADC_C3_Pin GPIO_PIN_2
+#define DMX_ADC_C4_Port GPIOA
+#define DMX_ADC_C4_Pin GPIO_PIN_3
+#define DMX_ADC_C5_Port GPIOB
+#define DMX_ADC_C5_Pin GPIO_PIN_0
 
 void MX_GPIO_Init(void);
 

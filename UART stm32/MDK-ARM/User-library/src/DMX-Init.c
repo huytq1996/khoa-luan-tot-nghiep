@@ -1,15 +1,15 @@
 #include "DMX-Init.h"
 #include "DMX-handle.h"
 
-ADC_HandleTypeDef hadc1;
-DMA_HandleTypeDef hdma_adc1;
-TIM_HandleTypeDef htim2,htim3;
-UART_HandleTypeDef huart1;
+extern ADC_HandleTypeDef hadc1;
+extern DMA_HandleTypeDef hdma_adc1;
+extern TIM_HandleTypeDef htim2,htim3;
+extern UART_HandleTypeDef huart1;
 
-volatile uint8_t dmxSendState;
+extern volatile uint8_t dmxSendState;
 
 uint8_t dmxData[DMX_CHANNELS + 1]={0};
-uint32_t adcbuf[DMX_NUMBER_ADC]={0};
+extern uint32_t adcbuf[DMX_NUMBER_ADC];
 
 void DMX_GPIO_DeInit()
 {
@@ -145,13 +145,41 @@ void MX_NVIC_Init(void)
 /* ADC1 init function */
 void MX_ADC1_Init(void)
 {
-  __HAL_RCC_ADC1_CLK_ENABLE();
+ __HAL_RCC_ADC1_CLK_ENABLE();
   ADC_ChannelConfTypeDef sConfig;
 	GPIO_InitTypeDef GPIO_InitStruct;
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2;
+  GPIO_InitStruct.Pin = DMX_ADC_C1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(DMX_ADC_C1_Port, &GPIO_InitStruct);
+	
+	
+
+	
+  GPIO_InitStruct.Pin = DMX_ADC_C2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DMX_ADC_C2_Port, &GPIO_InitStruct);
+	
+
+
+  GPIO_InitStruct.Pin = DMX_ADC_C3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DMX_ADC_C3_Port, &GPIO_InitStruct);
+	
+	
+  GPIO_InitStruct.Pin = DMX_ADC_C4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DMX_ADC_C4_Port, &GPIO_InitStruct);
+	
+	
+
+  GPIO_InitStruct.Pin = DMX_ADC_C5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DMX_ADC_C5_Port, &GPIO_InitStruct);
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
@@ -188,10 +216,11 @@ void MX_ADC1_Init(void)
 	sConfig.Rank = 4;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 	
-	sConfig.Channel = ADC_CHANNEL_4;
+	sConfig.Channel = ADC_CHANNEL_8;
 	sConfig.Rank = 5;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
+ 
 }
 
 /* TIM2 init function */

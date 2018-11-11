@@ -4,15 +4,19 @@
 #include "DMX-Init.h"
 #include "DMX-handle.h"
 #include "eeprom.h"
+
 uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
 uint16_t VarDataTab[NB_OF_VAR] = {0, 0, 0};
 uint16_t VarValue,VarDataTmp = 0;
-extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim3;
-extern volatile uint8_t dmxSendState;
-extern ADC_HandleTypeDef hadc1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+
+UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_adc1;
+volatile uint8_t dmxSendState;
+ ADC_HandleTypeDef hadc1;
  uint32_t key=0;
-extern uint32_t adcbuf[5];
+uint32_t adcbuf[DMX_NUMBER_ADC];
 uint16_t t,t1;
 void Error()
 {
@@ -63,12 +67,12 @@ int main(void)
 
 	htim3.Instance->CNT = 0;
 	htim3.Instance->ARR=10000;
-	HAL_TIM_Base_Start_IT(&htim2);
+	//HAL_TIM_Base_Start_IT(&htim2);
 //	HAL_TIM_Base_Start_IT(&htim3);
 uint32_t PAGEError = 0;
-t1=EE_Init();
-Error();
-HAL_FLASH_Unlock();
+//t1=EE_Init();
+//Error();
+/*HAL_FLASH_Unlock();
 HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008000, 0);
 HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008000, 1);
 HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008004, 1);
@@ -89,10 +93,10 @@ HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError);
 HAL_FLASH_Lock();
 t=*((uint16_t*)(0x08008004));
 t++;
-*((uint16_t*)(0x08008004))=0xFFFF;
+*((uint16_t*)(0x08008004))=0xFFFF;*/
   while (1)
  {
-	 int x=sizeof(stSET);
+	
 			dmx_main();
 		//key=KeyPad_getascii(KeyPad_press());
 		HAL_Delay(200);

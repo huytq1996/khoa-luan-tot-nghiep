@@ -2,7 +2,7 @@
 #include "DMX-Init.h"
 #include "DMX-handle.h"
 extern volatile uint8_t dmxData[DMX_CHANNELS+1];
-extern uint32_t adcbuf[3];
+extern uint32_t adcbuf[DMX_NUMBER_ADC];
 //extern uint8_t scanner_select[_M_ScannerNum];
 //extern uint8_t element_arr_scanner;
 extern ADC_HandleTypeDef hadc1;

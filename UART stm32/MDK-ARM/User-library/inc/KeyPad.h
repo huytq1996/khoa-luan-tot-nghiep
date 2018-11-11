@@ -6,29 +6,29 @@
 extern "C" {
 #endif
 
-#define Column_1_Port GPIOE
-#define Column_1_Pin GPIO_PIN_13
+#define Column_1_Port 		GPIOE						
+#define Column_1_Pin 	    GPIO_PIN_15  
+                                       
+#define Column_2_Port     GPIOB        
+#define Column_2_Pin 	    GPIO_PIN_1  
+                                       
+#define Column_3_Port     GPIOB        
+#define Column_3_Pin 	    GPIO_PIN_13   
+                                       
+#define Column_4_Port     GPIOB        
+#define Column_4_Pin 	    GPIO_PIN_15  
 
-#define Column_2_Port GPIOE
-#define Column_2_Pin GPIO_PIN_11
-
-#define Column_3_Port GPIOE
-#define Column_3_Pin GPIO_PIN_9
-
-#define Column_4_Port GPIOE
-#define Column_4_Pin GPIO_PIN_7
-
-#define Row_1_Port GPIOB
-#define Row_1_Pin GPIO_PIN_15
-
-#define Row_2_Port GPIOB
-#define Row_2_Pin GPIO_PIN_13
-
-#define Row_3_Port GPIOB
-#define Row_3_Pin GPIO_PIN_11
-
-#define Row_4_Port GPIOE
-#define Row_4_Pin GPIO_PIN_15
+#define Row_1_Port 				GPIOE					
+#define Row_1_Pin 		     GPIO_PIN_7
+                           
+#define Row_2_Port 		     GPIOE
+#define Row_2_Pin 		     GPIO_PIN_9
+                           
+#define Row_3_Port 		     GPIOE
+#define Row_3_Pin 		     GPIO_PIN_11
+                           
+#define Row_4_Port	       GPIOE
+#define Row_4_Pin 		     GPIO_PIN_13
 #define KeyPad_delay 5    
     
 #define KEYPAD4x4__VALUE_BEGIN                  0
