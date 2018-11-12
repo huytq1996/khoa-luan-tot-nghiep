@@ -5,12 +5,40 @@ extern ADC_HandleTypeDef hadc1;
 extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim2,htim3;
 extern UART_HandleTypeDef huart1;
+extern I2C_HandleTypeDef hi2c1;
 
 extern volatile uint8_t dmxSendState;
 
-uint8_t dmxData[DMX_CHANNELS + 1]={0};
+uint8_t dmxData[DMX_CHANNELS + 1]={100,100,100,100,100};
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
+void MX_I2C1_Init(void)
+{
+		
+	GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_8;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    /* Peripheral clock enable */
+    __HAL_RCC_I2C1_CLK_ENABLE();
+	
+	
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  HAL_I2C_Init(&hi2c1);
+
+
+}
 void DMX_GPIO_DeInit()
 {
   /*Configure GPIO pin : PD10 */
@@ -131,14 +159,15 @@ void MX_NVIC_Init(void)
   /* TIM2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM2_IRQn);
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 2, 2);
   HAL_NVIC_EnableIRQ(TIM3_IRQn);
   /* USART1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
-//	HAL_NVIC_EnableIRQ(ADC_IRQn);
-	//HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
-	HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+//
+	HAL_NVIC_SetPriority(ADC_IRQn, 2, 2);
+	HAL_NVIC_EnableIRQ(ADC_IRQn);
+	HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 2, 2);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
 }
 
@@ -206,18 +235,22 @@ void MX_ADC1_Init(void)
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 	sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = 2;
+	sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 	
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = 3;
+	sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 	
 	sConfig.Channel = ADC_CHANNEL_3;
 	sConfig.Rank = 4;
+	sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 	
 	sConfig.Channel = ADC_CHANNEL_8;
 	sConfig.Rank = 5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
  

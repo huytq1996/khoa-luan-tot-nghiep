@@ -1,11 +1,12 @@
 #include "DMX-handle.h"
 #include "string.h"
 #include "stdlib.h"
-
+#include "LCD.h"
 extern ADC_HandleTypeDef hadc1;
 extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim2,htim3;
 extern UART_HandleTypeDef huart1;
+extern uint8_t rowCheck , colCheck ;
 char v_display_buffer[2][17]={"",""};
 uint8_t v_state=SELECT_ADD;
 stSET set[DMX_NUMBER_SET];
@@ -22,6 +23,7 @@ extern uint8_t dmxData[DMX_CHANNELS+1];
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 void (*scene_current)(void);
 //void set_timer(uint32_t time);
+char *dmx_getstring();
 static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n );
 static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n )
 {
@@ -32,20 +34,40 @@ static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n )
 }
 void dmx_main()
 {
-	static uint8_t st=0;
+
 	while(1)
 	{
 		switch (v_state)
 		{
-			case SELECT_ADD :HAL_ADC_Stop_IT(&hadc1);
-			st=SELECT_ADD;
-					dmx_select_set();break;
+			case SELECT_ADD :
+				
+				HAL_ADC_Stop_DMA(&hadc1);
+
+				memset(dmxData,0,DMX_CHANNELS);
+					dmx_select_set();
+			v_state=SELECT_AUTO;
+			break;
 			case SELECT_AUTO :
-				if(st==SELECT_ADD)
+			//	if(v_state==SELECT_AUTO)
 				{
 					HAL_TIM_Base_Start_IT(&htim3);		
-					st=SELECT_AUTO;
+					HAL_ADC_Start_DMA(&hadc1, adcbuf, DMX_NUMBER_ADC) ;
+					lcd_clear();
+					lcd_home();
+					lcd_write_string("   SELECT SPEED    Press A ");
+					char *tmp1;
+					while(v_state!=YES)
+					{
+						tmp1=dmx_getstring();
+						free(tmp1);
+					}
+					HAL_ADC_Stop_DMA(&hadc1);
+					v_state=PLAYING;
+					lcd_clear();
+					lcd_home();
+					lcd_write_string("   PLAYING   ");
 				}
+			case PLAYING: break;
 					//	dmx_auto_play();
 			default : break;
 		}
@@ -53,7 +75,7 @@ void dmx_main()
 			
 	}
 }
-static void append(char subject[], const char insert[], int pos) {
+/*static void append(char subject[], const char insert[], int pos) {
  
 		uint8_t len = strlen(subject) + strlen(insert) + 2;
 		
@@ -72,7 +94,7 @@ static void append(char subject[], const char insert[], int pos) {
     // deallocate buf[] here, if used malloc()
     // e.g. free(buf);
 		free(buf);
-}
+}*/
 //char string[17]="";
 
 char *dmx_getstring()
@@ -92,6 +114,9 @@ char *dmx_getstring()
 			if(tmplen>0)
 			{
 				string[tmplen-1]=0;
+			  lcd_setCursor(rowCheck,colCheck-1);
+				lcd_write(' ');
+				lcd_setCursor(rowCheck,colCheck-1);
 				if(count>0)
 				{
 					count--;
@@ -101,13 +126,15 @@ char *dmx_getstring()
 		}
 		else
 		{
-			if(checknum(buf))
+			if(checknum(buf)&&count!=3)
 			{
-				string[tmplen]=KeyPad_getascii(buf);
-				count++;
+					string[tmplen]=KeyPad_getascii(buf);
+					lcd_write(string[tmplen]);
+					count++;
+					string[tmplen+1]=0;
 			}
 		}
-		string[tmplen+1]=0;
+		
 		
 		buf=  KeyPad_getKey(GET_CHAR_NUM);
 	
@@ -139,6 +166,7 @@ char *dmx_getstring()
 }
 void dmx_add_group(SCENE *scene,uint8_t *arr)
 {
+	char temp[32]="";
 	uint8_t num=0,len=0;
 	char *tmp1;
 
@@ -148,6 +176,10 @@ void dmx_add_group(SCENE *scene,uint8_t *arr)
 	scene->len+=len;
 	for(int i=0;i<len;i++)
 	{//nhap dia chi den 1
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"Addr of scanner %d: ",i+1);
+		lcd_write_string(temp);
 		tmp1=dmx_getstring();
 		num=atoi(tmp1);
 		arr[i]=num;
@@ -156,31 +188,42 @@ void dmx_add_group(SCENE *scene,uint8_t *arr)
 	scene_cur=scene;
 	arr_cur=arr;
 	len_cur=len;
-	HAL_ADC_Start_IT(&hadc1);
+	
+	HAL_ADC_Start_DMA(&hadc1,adcbuf,DMX_NUMBER_ADC);
 	//dmx_add_scanner(scene,arr,len);
 //	tmp1=dmx_getstring();
-	free(tmp1);
+//	free(tmp1);
+	lcd_clear();
+	lcd_home();
+	lcd_write_string("select effect    press A");
+	
 	while(v_state!=YES)
 	{
 		tmp1=dmx_getstring();
 		free(tmp1);
 	}
 	v_state=SELECT_ADD;
-	HAL_ADC_Stop_IT(&hadc1);
+	HAL_ADC_Stop_DMA(&hadc1);
 }
 void dmx_add_scene(SCENE *scene)
 {
 	uint8_t group;
 	char *tmp1;
   
-//nhap so luong group 
+//nhap so luong group
+
 	tmp1=dmx_getstring();
 	group=atoi(tmp1);
 	scene->len=0;
 	for(int i=0;i<group;i++)
 	{
+		char temp[32]="";
 		uint8_t arr[16]="";
 		memset(dmxData,0,DMX_CHANNELS);
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"number scaner of group %d: ",i+1);
+		lcd_write_string(temp);
 		dmx_add_group(scene,arr);
 	}
 		free(tmp1);
@@ -228,8 +271,12 @@ void dmx_out_scanner(SCANNER *scanner)
 
 void dmx_out_scene(SCENE *scene)
 {
-
-	if(out_scene_cur<scene->len)
+		for(int i=0;i<scene->len;i++)
+	{
+			dmx_out_scanner(&(scene->scanner[i]));
+	}
+	
+	/*if(out_scene_cur<scene->len)
 	{
 		memset(dmxData,0,DMX_CHANNELS);
 		dmx_out_scanner(&(scene->scanner[out_scene_cur]));
@@ -239,19 +286,26 @@ void dmx_out_scene(SCENE *scene)
 	{
 		out_set_cur++;
 		out_scene_cur=0;
-	}
+		memset(dmxData,0,DMX_CHANNELS);
+		dmx_out_scanner(&(scene->scanner[out_scene_cur]));
+	}*/
 }
 void dmx_out_set(stSET *set1)
 {
-
+/*	for(int i=0;i<set1->len;i++)
+	{
+			dmx_out_scene(&(set1->scene[i]));
+	}*/
 	if(out_set_cur<set1->len)
 	{
 		dmx_out_scene(&(set1->scene[out_set_cur]));
-		//out_set_cur++;
+		out_set_cur++;
 	}
 	else
 	{
 		out_set_cur=0;
+		dmx_out_scene(&(set1->scene[out_set_cur]));
+			out_set_cur=1;
 	}
 	
 }
@@ -259,14 +313,18 @@ void dmx_auto_play()
 {
 	static uint8_t count=0;
 	
-	if(v_state==SELECT_AUTO)
+	if(v_state==PLAYING||v_state==SELECT_AUTO)
 	{
 		if(count<set_len)
 			dmx_out_set(&set[count]);
 		else
-			count=0;
+		{
+			//count=0;
+			dmx_out_set(&set[count]);
+		}
 		//set_timer(1000);
 	}
+	//count++;
 }
 
 
@@ -275,25 +333,37 @@ void dmx_select_set()
 	//nhap so luong set
 	char *tmp1;
 	//nhap so luong set
+	lcd_clear();
+	lcd_home();
+	lcd_write_string("number of profile: ");
+	
 	tmp1=dmx_getstring();
 	set_len=atoi(tmp1);
 	//set tung canh
 	for(int i=0;i<set_len;i++)
 	{
-	
+		char temp[32]="";
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"number scene of profile %d: ",i+1);
+		lcd_write_string(temp);
 		dmx_add_set(&set[i]);
 		
 	}
+	lcd_clear();
+	lcd_home();
+	lcd_write_string(" press # to play ");
 	tmp1=dmx_getstring();
 	
 	free(tmp1);
+
 	while(v_state!=SELECT_AUTO)
 	{
 	tmp1=dmx_getstring();
-	
+
 	free(tmp1);	
 	}
-	HAL_ADC_Stop_IT(&hadc1);
+
 }
 void dmx_add_set(stSET *SET)
 {
@@ -301,12 +371,18 @@ void dmx_add_set(stSET *SET)
 	
 	char *tmp1;
 	//nhap so luong canh
+	
 	tmp1=dmx_getstring();
 	SET->len=atoi(tmp1);
 		//set tung canh
 	for(int i=0;i<SET->len;i++)
 	{
 		//nhap canh thu i+1
+		char temp[32]="";
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"number group of scene %d: ",i+1);
+		lcd_write_string(temp);
 		dmx_add_scene(&(SET->scene[i]));		
 	}
 	free(tmp1);

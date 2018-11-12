@@ -40,3 +40,4 @@ uart\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 uart\main.o: .\User-library\inc\DMX-Init.h
 uart\main.o: ..\MDK-ARM\DMX-handle.h
 uart\main.o: ../Inc/eeprom.h
+uart\main.o: ..\MDK-ARM\LCD.h

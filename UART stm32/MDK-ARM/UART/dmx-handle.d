@@ -40,3 +40,4 @@ uart\dmx-handle.o: .\User-library\inc\KeyPad.h
 uart\dmx-handle.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 uart\dmx-handle.o: .\User-library\inc\DMX-Init.h
 uart\dmx-handle.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+uart\dmx-handle.o: LCD.h

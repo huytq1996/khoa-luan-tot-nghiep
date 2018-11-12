@@ -1,12 +1,14 @@
+
 #include "LCD.h"
-#include "stm32f4xx_hal_i2c.h"
+#include "string.h"
 uint8_t _displayFunction = 0;
 uint8_t _numLines = 0;
 uint8_t _displayControl = 0;
 uint8_t _displayMode = 0;
-int rowCheck = 0, colCheck = 0;
-I2C_HandleTypeDef hi2c1;
-void lcd_init(uint8_t cols, uint8_t lines)
+uint8_t rowCheck = 0, colCheck = 0;
+extern I2C_HandleTypeDef hi2c1;
+
+void lcd_init(uint8_t lines , uint8_t cols)
 {
 	if (lines > 1) 
 	{
@@ -69,7 +71,7 @@ void lcd_send(uint8_t value, uint8_t mode)
 	lcd_write4bits((lownib) | mode);
 }
 
-void lcd_write(uint8_t value)
+void lcd_write(char value)
 {
 	lcd_send(value, Rs);
 	colCheck++;
@@ -77,7 +79,7 @@ void lcd_write(uint8_t value)
 	{
 		if (rowCheck == 0)
 		{
-			lcd_setCursor(0, 1);
+			lcd_setCursor(1, 0);
 		}
 		else
 		{
@@ -88,7 +90,12 @@ void lcd_write(uint8_t value)
 	}
 }
 
-
+void lcd_write_string(char *value)
+	{
+		uint8_t len= strlen(value);
+		for(uint8_t i=0;i<len;i++)
+		lcd_write(value[i]);
+	}
 
 
 void lcd_command(uint8_t value)
@@ -108,7 +115,7 @@ void lcd_display()
 void lcd_clear(void)
 {
 	lcd_command(LCD_CLEARDISPLAY);
-	HAL_Delay(5);
+	HAL_Delay(1);
 }
 
 void lcd_home()
@@ -118,7 +125,7 @@ void lcd_home()
 	rowCheck = 0;
 	colCheck = 0;
 }
-void lcd_setCursor(uint8_t col, uint8_t row)
+void lcd_setCursor(uint8_t row, uint8_t col)
 {
 	int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 	if (row > _numLines) {

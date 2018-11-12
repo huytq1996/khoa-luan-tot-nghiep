@@ -1,8 +1,8 @@
 #include "main.h"
-
+extern uint16_t v_UCLN;
 volatile uint8_t input_data[LEN_DATA];
  uint8_t j=0;
-
+uint32_t test;
 void delay_us(uint32_t x)
 {
      while(x--)
@@ -43,23 +43,37 @@ int main(void) {
   }
   while(!((xclk<512)&&(xclk>=0)));
   
-
+  
   input_data[0]=255;
   input_data[1]=255;
   input_data[2]=255;
   input_data[3]=0;
   input_data[4]=10;
-  uint8_t  input_before[2]={0,0};
+  static uint8_t  input_before[2]={0,0};
   while(1)
   {
     if(input_data[3]!=0 || input_data[4]!=0)
     {
       if(input_before[0]!=input_data[3]||input_before[1]!=input_data[4])
       {
+          UCLN(input_data[3],input_data[4]);
+          if(v_UCLN==0)
+          {
+            TIM1_Cmd(DISABLE);
+          }
+          else
+          {
+                TIM1_Cmd(!DISABLE);
+               TIM1_SetAutoreload(v_UCLN);
+              
+          }
+       
+        test=TIM1_GetCounter();
         input_before[0]=input_data[3];
         input_before[1]=input_data[4];
-        TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
+     //   TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
         TIM1_ClearFlag(TIM1_FLAG_UPDATE);
+        TIM1_ClearFlag(TIM1_FLAG_BREAK);
       }
     }
     else

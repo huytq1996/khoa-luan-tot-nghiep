@@ -49,16 +49,17 @@
 #define Rw 0x02  // Read/Write bit
 #define Rs 0x01  // Register select bit
 
-void lcd_init(uint8_t cols, uint8_t lines);
+void lcd_init(uint8_t lines , uint8_t cols);
 void lcd_expanderWrite(uint8_t _data);
 void lcd_pulseEnable(uint8_t _data);
 void lcd_write4bits(uint8_t value);
 void lcd_send(uint8_t value, uint8_t mode);
-void lcd_write(uint8_t value);
+void lcd_write(char value);
+void lcd_write_string(char *value);
 void lcd_command(uint8_t value);
 void lcd_display(void);
 void lcd_clear(void);
 void lcd_home(void);
-void lcd_setCursor(uint8_t col, uint8_t row);
+void lcd_setCursor(uint8_t row, uint8_t col);
 int colorNumber(void);
 #endif

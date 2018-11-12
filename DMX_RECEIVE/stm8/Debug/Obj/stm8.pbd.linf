@@ -1,6 +1,4 @@
 ﻿C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8.pbd
-C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\dmx512.pbi
-C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\main.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_adc1.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_awu.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_beep.pbi
@@ -9,7 +7,6 @@ C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_flash.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_gpio.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_i2c.pbi
-C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_it.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_itc.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_iwdg.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_rst.pbi
@@ -19,3 +16,6 @@ C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_tim4.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_uart1.pbi
 C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_wwdg.pbi
+C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\dmx512.pbi
+C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\main.pbi
+C:\Users\nhocc\Desktop\anything\khoa-luan-tot-nghiep\DMX_RECEIVE\stm8\Debug\Obj\stm8s_it.pbi

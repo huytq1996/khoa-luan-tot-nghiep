@@ -4,13 +4,13 @@
 #include "DMX-Init.h"
 #include "DMX-handle.h"
 #include "eeprom.h"
-
+#include "LCD.h"
 uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
 uint16_t VarDataTab[NB_OF_VAR] = {0, 0, 0};
 uint16_t VarValue,VarDataTmp = 0;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
-
+I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_adc1;
 volatile uint8_t dmxSendState;
@@ -48,27 +48,27 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
 	MX_TIM3_Init();
- // MX_I2C1_Init();
+  MX_I2C1_Init();
   /* Initialize interrupts */
   MX_NVIC_Init();
-	//Dmx512DisableUsart(&huart1);
+	DMX_DisableUsart(&huart1);
 	HAL_GPIO_WritePin(DMX_TX_GPIO_Port,DMX_TX_Pin,GPIO_PIN_SET);
 	//HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12,GPIO_PIN_SET);
 //	HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,GPIO_PIN_SET);
 	dmxSendState=STATE_MBB;
-	/*htim2.Instance->CNT = 0;
-	HAL_TIM_Base_Start_IT(&htim2);*/
+	htim2.Instance->CNT = 0;
+	HAL_TIM_Base_Start_IT(&htim2);
   KeyPad_init();
 //HAL_ADC_Start(&hadc1);
-  HAL_ADC_Start_DMA(&hadc1, adcbuf, DMX_NUMBER_ADC) ;
+  //HAL_ADC_Start_DMA(&hadc1, adcbuf, DMX_NUMBER_ADC) ;
  // EE_Init();
     /* Start Conversation Error */
   //  Error_Handler(); 
 
 	htim3.Instance->CNT = 0;
 	htim3.Instance->ARR=10000;
-	//HAL_TIM_Base_Start_IT(&htim2);
-//	HAL_TIM_Base_Start_IT(&htim3);
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim3);
 uint32_t PAGEError = 0;
 //t1=EE_Init();
 //Error();
@@ -94,6 +94,11 @@ HAL_FLASH_Lock();
 t=*((uint16_t*)(0x08008004));
 t++;
 *((uint16_t*)(0x08008004))=0xFFFF;*/
+
+	lcd_init(16,2);
+	lcd_clear();
+	lcd_setCursor(0,0);
+	HAL_Delay(1000);
   while (1)
  {
 	

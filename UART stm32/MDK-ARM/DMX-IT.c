@@ -13,10 +13,21 @@ extern volatile uint8_t dmxSendState;
 extern SCENE *scene_cur;
 extern uint8_t *arr_cur;
 extern uint8_t len_cur;
+extern uint8_t v_state;
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	
+	if(v_state==SELECT_ADD)
 			dmx_add_scanner(scene_cur,arr_cur,len_cur);
+	else if(v_state==SELECT_AUTO)
+		{	
+			uint16_t tem=5000/255*((adcbuf[3]>>2)<<2);
+	
+			htim3.Instance->ARR=tem;
+				if(	htim3.Instance->CNT >(tem+1))
+			{
+				htim3.Instance->CNT=tem-20;
+			}
+		}
 	/*for(int i=0;i<element_arr_scanner;i++)
 	{
 		

@@ -411,13 +411,13 @@ void dmx512_fade()
    static uint8_t fade=0;
    blink++;
    fade++;
-   x=(((uint16_t)input_data[3]*12)/v_UCLN);
+   x=(((uint16_t)input_data[3]*5)/v_UCLN);
    if(input_data[3]!=0&&blink>=x)
    {
      blink=0;
      dmx512_blink();
    }
-   x=(((uint16_t)input_data[4]*4)/v_UCLN);
+   x=(((uint16_t)input_data[4])/v_UCLN);
    if(input_data[4]!=0&&fade>=x)
    {
      fade=0;
