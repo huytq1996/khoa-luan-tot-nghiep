@@ -17,6 +17,7 @@ SCENE scene_select[DMX_NUMBER_SCENE];
 SCENE *scene_cur=NULL;
 uint8_t *arr_cur=NULL;
 uint8_t len_cur=0;
+volatile uint8_t flag_timer2=1;
 static uint8_t out_set_cur=0;
 static uint8_t out_scene_cur=0;
 extern uint8_t dmxData[DMX_CHANNELS+1];
@@ -68,7 +69,7 @@ void dmx_main()
 					lcd_write_string("   PLAYING   ");
 				}
 			case PLAYING: break;
-					//	dmx_auto_play();
+			//			dmx_auto_play();
 			default : break;
 		}
 				
@@ -218,7 +219,7 @@ void dmx_add_scene(SCENE *scene)
 	for(int i=0;i<group;i++)
 	{
 		char temp[32]="";
-		uint8_t arr[16]="";
+		static uint8_t arr[16]="";
 		memset(dmxData,0,DMX_CHANNELS);
 		lcd_clear();
 		lcd_home();
@@ -228,36 +229,43 @@ void dmx_add_scene(SCENE *scene)
 	}
 		free(tmp1);
 }
-void dmx_scan_color(SCENE *scene)
+void dmx_scan_color(SCENE *scene,uint8_t *arr,uint8_t len)
 {
 	
-	for(int i=0;i<scene->len;i++)
+	for(int i=0;i<len;i++)
 	{
-		if(scene->scanner[i].Addr!=0)
+		if(scene->scanner[arr[i]].Addr!=0)
 		{
-			dmxData[scene->scanner[i].Addr]=scene->scanner[i].red;
-			dmxData[scene->scanner[i].Addr+1]=scene->scanner[i].green;
-			dmxData[scene->scanner[i].Addr+2]=scene->scanner[i].blue;
-			dmxData[scene->scanner[i].Addr+3]=scene->scanner[i].blink;
-			dmxData[scene->scanner[i].Addr+4]=scene->scanner[i].fade;
+			dmxData[arr[i]]=scene->scanner[i].red;
+			dmxData[arr[i]+1]=scene->scanner[i].green;
+			dmxData[arr[i]+2]=scene->scanner[i].blue;
+			dmxData[arr[i]+3]=scene->scanner[i].blink;
+			dmxData[arr[i]+4]=scene->scanner[i].fade;
 		}
 	}
 }
 void dmx_add_scanner(SCENE *scene,uint8_t *arr,uint8_t len)
 {
+	uint8_t temp =0;
 	for(int i=0;i<len;i++)
 	{
-		scene->scanner[i].Addr=arr[i];
-		scene->scanner[i].red=adcbuf[0];
-		scene->scanner[i].green=adcbuf[1];
-		scene->scanner[i].blue=adcbuf[2];
-		scene->scanner[i].blink=adcbuf[3];
-		scene->scanner[i].fade=adcbuf[4];
+		temp=scene->len-len+i;
+		scene->scanner[temp].Addr=arr[i];
+		scene->scanner[temp].red=adcbuf[0];
+		dmxData[arr[i]]=adcbuf[0];
+		scene->scanner[temp].green=adcbuf[1];
+		dmxData[arr[i]+1]=adcbuf[1];
+		scene->scanner[temp].blue=adcbuf[2];
+		dmxData[arr[i]+2]=adcbuf[2];
+		scene->scanner[temp].blink=adcbuf[3];
+		dmxData[arr[i]+3]=adcbuf[3];
+		scene->scanner[temp].fade=adcbuf[4];
+		dmxData[arr[i]+4]=adcbuf[4];
 		//scene->scanner[arr[i]].mode=??????;
 	//	scene->scanner[arr[i]].timer=adcbuf[3];
 	}
 	
-	dmx_scan_color(scene);
+//	dmx_scan_color(scene,arr,len);
 	
 }
 void dmx_out_scanner(SCANNER *scanner)
@@ -296,16 +304,18 @@ void dmx_out_set(stSET *set1)
 	{
 			dmx_out_scene(&(set1->scene[i]));
 	}*/
-	if(out_set_cur<set1->len)
+	if(out_scene_cur<set1->len)
 	{
-		dmx_out_scene(&(set1->scene[out_set_cur]));
-		out_set_cur++;
+		memset(dmxData,0,DMX_CHANNELS);
+		dmx_out_scene(&(set1->scene[out_scene_cur]));
+		out_scene_cur++;
 	}
 	else
 	{
-		out_set_cur=0;
-		dmx_out_scene(&(set1->scene[out_set_cur]));
-			out_set_cur=1;
+		out_scene_cur=0;
+		memset(dmxData,0,DMX_CHANNELS);
+		dmx_out_scene(&(set1->scene[out_scene_cur]));
+			out_scene_cur=1;
 	}
 	
 }
@@ -319,7 +329,7 @@ void dmx_auto_play()
 			dmx_out_set(&set[count]);
 		else
 		{
-			//count=0;
+	//		count=0;
 			dmx_out_set(&set[count]);
 		}
 		//set_timer(1000);

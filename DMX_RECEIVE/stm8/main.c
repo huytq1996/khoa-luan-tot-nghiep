@@ -1,8 +1,12 @@
 #include "main.h"
 extern uint16_t v_UCLN;
 volatile uint8_t input_data[LEN_DATA];
- uint8_t j=0;
+extern uint8_t flag_receive;
+extern uint8_t state;
+uint8_t j=0;
 uint32_t test;
+ extern uint8_t fade;
+ extern uint8_t blink;
 void delay_us(uint32_t x)
 {
      while(x--)
@@ -50,39 +54,28 @@ int main(void) {
   input_data[3]=0;
   input_data[4]=10;
   static uint8_t  input_before[2]={0,0};
+  TIM1_SetAutoreload(1);
   while(1)
   {
     if(input_data[3]!=0 || input_data[4]!=0)
     {
-      if(input_before[0]!=input_data[3]||input_before[1]!=input_data[4])
-      {
-          UCLN(input_data[3],input_data[4]);
-          if(v_UCLN==0)
-          {
-            TIM1_Cmd(DISABLE);
-          }
-          else
-          {
-                TIM1_Cmd(!DISABLE);
-               TIM1_SetAutoreload(v_UCLN);
-              
-          }
-       
+    
+          
+        TIM1_Cmd(!DISABLE);
         test=TIM1_GetCounter();
         input_before[0]=input_data[3];
         input_before[1]=input_data[4];
-     //   TIM1_SetAutoreload(UCLN(input_data[3],input_data[4]));
         TIM1_ClearFlag(TIM1_FLAG_UPDATE);
         TIM1_ClearFlag(TIM1_FLAG_BREAK);
-      }
-    }
-    else
+   
+  } else
     {
+      TIM1_Cmd(DISABLE);
       color_red=input_data[0];
       color_green=input_data[1];
       color_blue=input_data[2];
     }
-  }
+}
 }
  
 

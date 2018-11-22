@@ -1,5 +1,6 @@
 #include "dmx512.h"
 volatile uint16_t v_UCLN;
+volatile uint8_t flag_receive=0;
  extern uint8_t input_data[LEN_DATA];
 uint8_t dmx512_get_data(int i) {
     return input_data[i];
@@ -181,6 +182,7 @@ void dmx512_handler_rx_uart()
       byte_count++;
       data_count++;
   }
+  flag_receive=1;
  end: byte_count = 0;
       dmx_timeout_val=0;
       start_flag=0;
@@ -269,16 +271,16 @@ uint16_t check(BitStatus a)
 uint16_t dmx512_set_and_read_channel()
 {
   uint16_t ch=0;
-  ch|=check((GPIO_ReadInputPin(GPIOA,GPIO_PIN_2)))<<6;
-  ch|=check((GPIO_ReadInputPin(GPIOA,GPIO_PIN_1)))<<5;
-  ch|=check((GPIO_ReadInputPin(GPIOB,GPIO_PIN_5)))<<4;
-  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_4)))<<3;
-  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_5)))<<2;
-  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_6)))<<1;
-  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_7)))<<0;
- // ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_1)))<<0;
- // ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_2)))<<7;
-  CHANNEL=((~ch)&0x7F);
+  ch|=check((GPIO_ReadInputPin(GPIOA,GPIO_PIN_2)))<<8;
+  ch|=check((GPIO_ReadInputPin(GPIOA,GPIO_PIN_1)))<<7;
+  ch|=check((GPIO_ReadInputPin(GPIOB,GPIO_PIN_5)))<<6;
+  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_4)))<<5;
+  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_5)))<<4;
+  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_6)))<<3;
+  ch|=check((GPIO_ReadInputPin(GPIOC,GPIO_PIN_7)))<<2;
+  ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_1)))<<1;
+  ch|=check((GPIO_ReadInputPin(GPIOD,GPIO_PIN_2)))<<0;
+  CHANNEL=((~ch)&0x1FF);
   return CHANNEL;
                 
 }
@@ -309,9 +311,10 @@ uint16_t UCLN(uint16_t a,uint16_t b)
     v_UCLN=a;
     return a;
 }
+uint8_t state=0;
 void dmx512_blink()
 {
-  static uint8_t state=0;
+
   if(state==1)
   {
     color_red=0;
@@ -404,20 +407,23 @@ void dmx512_fade()
   } 
  
 }
+  uint8_t fade=0;
+  uint8_t blink=0;
  void dmx512_IT_timer1()
  {
-   static uint8_t blink=0;
+
    uint8_t x;
-   static uint8_t fade=0;
    blink++;
    fade++;
-   x=(((uint16_t)input_data[3]*5)/v_UCLN);
+  // x=(((uint16_t)input_data[3]*5)/v_UCLN);
+   x=((uint16_t)input_data[3]*5);
    if(input_data[3]!=0&&blink>=x)
    {
      blink=0;
      dmx512_blink();
    }
    x=(((uint16_t)input_data[4])/v_UCLN);
+   x=(uint16_t)input_data[4];
    if(input_data[4]!=0&&fade>=x)
    {
      fade=0;

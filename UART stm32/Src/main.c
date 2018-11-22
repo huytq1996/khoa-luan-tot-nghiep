@@ -66,7 +66,7 @@ int main(void)
   //  Error_Handler(); 
 
 	htim3.Instance->CNT = 0;
-	htim3.Instance->ARR=10000;
+	htim3.Instance->ARR=2000;
 	HAL_TIM_Base_Start_IT(&htim2);
 	HAL_TIM_Base_Start_IT(&htim3);
 uint32_t PAGEError = 0;

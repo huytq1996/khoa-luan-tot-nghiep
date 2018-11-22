@@ -14,20 +14,45 @@ extern SCENE *scene_cur;
 extern uint8_t *arr_cur;
 extern uint8_t len_cur;
 extern uint8_t v_state;
+extern uint8_t flag_timer2;
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	if(v_state==SELECT_ADD)
-			dmx_add_scanner(scene_cur,arr_cur,len_cur);
-	else if(v_state==SELECT_AUTO)
-		{	
-			uint16_t tem=5000/255*((adcbuf[3]>>2)<<2);
+	static int c=0;
+
+	if(c<100)
+	{
+		c++;
+		return;
+	}
+	else 
+		c=0;
 	
-			htim3.Instance->ARR=tem;
-				if(	htim3.Instance->CNT >(tem+1))
-			{
-				htim3.Instance->CNT=tem-20;
-			}
+	if(v_state==SELECT_ADD||v_state==SELECT_AUTO)
+	{
+		if(v_state==SELECT_ADD)
+		dmx_add_scanner(scene_cur,arr_cur,len_cur);
+
+		if(adcbuf[3]<5)
+		{
+			flag_timer2=1;
+			HAL_TIM_Base_Stop_IT(&htim3);
 		}
+		else 
+		{
+	
+			uint16_t tem;
+			if(v_state==SELECT_ADD)
+				 tem=20*adcbuf[3]+2;
+			else
+				tem=75*adcbuf[3];
+				htim3.Instance->ARR=tem;
+					if(	htim3.Instance->CNT >(tem+1))
+				{
+					htim3.Instance->CNT=0;
+				}
+				HAL_TIM_Base_Start_IT(&htim3);
+			}
+	}
 	/*for(int i=0;i<element_arr_scanner;i++)
 	{
 		
@@ -38,7 +63,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 { 
-	if(htim->Instance==TIM2)
+	if(htim->Instance==TIM2&&flag_timer2>0)
 	{
 	switch(dmxSendState)
 		{
@@ -71,12 +96,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 		__NOP();
 		};
-		//HAL_UART_IRQHandler(&huart1);
+		flag_timer2++;
+		if(flag_timer2==3)
+		flag_timer2=0;
 			break;
 		}
 		}else if(htim->Instance==TIM3)
 		{
-			dmx_auto_play();
+			
+			if(v_state==SELECT_AUTO||v_state==PLAYING)
+			{
+				memset(dmxData,0,DMX_CHANNELS);
+				dmx_auto_play();
+			}
+			flag_timer2=1;
+			htim2.Instance->ARR = MARK_BEFORE_BREAK;
+			htim2.Instance->CNT = 0;
 			HAL_GPIO_TogglePin(LD4_GPIO_Port,LD4_Pin);
 		}
 }
