@@ -1,8 +1,8 @@
 uart\keypad.o: User-library\src\KeyPad.c
 uart\keypad.o: .\User-library\inc\KeyPad.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-uart\keypad.o: ../Inc/stm32f4xx_hal_conf.h
-uart\keypad.o: ../Inc/mxconstants.h
+uart\keypad.o: ..\Inc\stm32f4xx_hal_conf.h
+uart\keypad.o: ..\Inc\mxconstants.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 uart\keypad.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -35,4 +35,7 @@ uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
+uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
+uart\keypad.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 uart\keypad.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

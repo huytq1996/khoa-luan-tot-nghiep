@@ -1,8 +1,8 @@
 uart\dmx-init.o: User-library\src\DMX-Init.c
-uart\dmx-init.o: .\User-library\inc\DMX-Init.h
+uart\dmx-init.o: .\User-library\inc\DMX-handle.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-uart\dmx-init.o: ../Inc/stm32f4xx_hal_conf.h
-uart\dmx-init.o: ../Inc/mxconstants.h
+uart\dmx-init.o: ..\Inc\stm32f4xx_hal_conf.h
+uart\dmx-init.o: ..\Inc\mxconstants.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 uart\dmx-init.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -35,7 +35,11 @@ uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-uart\dmx-init.o: ..\MDK-ARM\DMX-handle.h
+uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
+uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
+uart\dmx-init.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 uart\dmx-init.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 uart\dmx-init.o: .\User-library\inc\KeyPad.h
 uart\dmx-init.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+uart\dmx-init.o: .\User-library\inc\DMX-Init.h
+uart\dmx-init.o: .\User-library\inc\DMX-handle.h

@@ -1,15 +1,15 @@
-#include "DMX-Init.h"
+//#include "DMX-Init.h"
 #include "DMX-handle.h"
 
 extern ADC_HandleTypeDef hadc1;
-extern DMA_HandleTypeDef hdma_adc1;
+extern DMA_HandleTypeDef hdma_adc1,hdma_uart,hdma_bluetooth;
 extern TIM_HandleTypeDef htim2,htim3;
-extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart1,huart2;
 extern I2C_HandleTypeDef hi2c1;
-
+extern UART_HandleTypeDef huart_dmx;
 extern volatile uint8_t dmxSendState;
-
-uint8_t dmxData[DMX_CHANNELS + 1]={100,100,100,100,100};
+extern MODE_STATE mode;
+uint8_t dmxData[DMX_CHANNELS]={100,100,100,100,100};
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 void MX_I2C1_Init(void)
 {
@@ -43,19 +43,41 @@ void DMX_GPIO_DeInit()
 {
   /*Configure GPIO pin : PD10 */
 	GPIO_InitTypeDef GPIO_InitStruct;
-  GPIO_InitStruct.Pin = DMX_TX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(DMX_TX_GPIO_Port, &GPIO_InitStruct);
+	
+		GPIO_InitStruct.Pin = DMX_TX_Pin_MANUAL;
+		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(DMX_TX_GPIO_Port_MANUAL, &GPIO_InitStruct);
+	
+
+  
+
 }
 void DMX_GPIO_Init()
 {
   /*Configure GPIO pin : PD10 */
 	GPIO_InitTypeDef GPIO_InitStruct;
-  GPIO_InitStruct.Pin = DMX_TX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(DMX_TX_GPIO_Port, &GPIO_InitStruct);
+		
+	
+		GPIO_InitStruct.Pin = DMX_TX_Pin_MANUAL;
+		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(DMX_TX_GPIO_Port_MANUAL, &GPIO_InitStruct);
+	
+		if(mode==ANDROID||mode==MANUAL)
+	{
+		GPIO_InitStruct.Pin = GPIO_PIN_6;
+		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	}
+	if(mode==PC)
+	{
+		GPIO_InitStruct.Pin = GPIO_PIN_6;
+		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	}
 }
 void DMX_DisableUsart(UART_HandleTypeDef *huart1) {
 	HAL_UART_MspDeInit(huart1);
@@ -64,48 +86,11 @@ void DMX_DisableUsart(UART_HandleTypeDef *huart1) {
 void DMX_EnableUsart(UART_HandleTypeDef *huart1) {
 
 	HAL_UART_MspInit(huart1);
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
+	if(huart1->Instance==USART1)
+		HAL_NVIC_EnableIRQ(USART1_IRQn);
+	if(huart1->Instance==USART6)
+		HAL_NVIC_EnableIRQ(USART6_IRQn);
 }
-
-void showRGB(uint16_t color,uint16_t Channel)
-{
-	uint8_t redPWM;
-	uint8_t greenPWM;
-	uint8_t bluePWM;
- 
-	if (color <= 255)          // phân vùng 1
-	{
-		redPWM = 255 - color;    // red di t? sáng v? t?t
-		greenPWM = color;        // green di t? t?t thành sáng
-		bluePWM = 0;             // blue luôn t?t
-	}
-	else if (color <= 511)     // phân vùng 2
-	{
-		redPWM = 0;                     // d? luôn t?t
-		greenPWM = 255 - (color - 256); // green di t? sáng v? t?t
-		bluePWM = (color - 256);        // blue di t? t?t thành sáng
-	}
-	else // color >= 512       // phân vùng 3
-	{
-		redPWM = (color - 512);         // red t?t r?i l?i sáng
-		greenPWM = 0;                   // green luôn t?t nhé
-		bluePWM = 255 - (color - 512);  // blue sáng r?i l?i t?t
-	}
- 
-	// r?i xu?t xung ra và choi thôi :3
-	Channel=Channel*3-2;
-	dmxData[Channel]=redPWM;
-	dmxData[Channel+1]=greenPWM;
-	dmxData[Channel+2]=bluePWM;
-	 
-}
-void show24bit(uint32_t color)
-	{
-		dmxData[1]=color& UINT8_MAX;
-		dmxData[2]=(color>>8)& UINT8_MAX;
-		dmxData[3]=(color>>16)& UINT8_MAX;
-	}
-
 
 
 /** System Clock Configuration
@@ -159,16 +144,35 @@ void MX_NVIC_Init(void)
   /* TIM2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM2_IRQn);
-	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	//
   /* USART1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(USART1_IRQn);
-//
+	if(mode==MANUAL)
+  {
+	 HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(ADC_IRQn);
 	HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM3_IRQn);
+		
+	}
+	else if(mode==ANDROID)
+  {
+
+		HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(USART3_IRQn);
+		HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+		 HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(USART1_IRQn);
+	}
+else if (mode== PC)
+	{
+		HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(USART6_IRQn);
+	}
 }
 
 /* ADC1 init function */
@@ -300,21 +304,134 @@ void MX_TIM3_Init(void)
 
 }
 /* USART1 init function */
-void MX_USART1_UART_Init(void)
+void MX_USART1_UART_Init(MODE_STATE a)
 {
+if(a==MANUAL||a==ANDROID)
+  {
+		huart_dmx.Instance = USART1;
+	}
+else if (a== PC)
+	{
+		huart_dmx.Instance = USART6;
+	}
+  huart_dmx.Init.BaudRate = BAUDRATE;
+  huart_dmx.Init.WordLength = UART_WORDLENGTH_8B;
+  huart_dmx.Init.StopBits = UART_STOPBITS_2;
+  huart_dmx.Init.Parity = UART_PARITY_NONE;
+  huart_dmx.Init.Mode = UART_MODE_TX_RX;
+  huart_dmx.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart_dmx.Init.OverSampling = UART_OVERSAMPLING_16;
+  HAL_UART_Init(&huart_dmx);
+	
 
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = BAUDRATE;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_2;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  HAL_UART_Init(&huart1);
 
 }
+void MX_USART3_UART_Init(void)
+{
+	USART_Config();
+	huart2.Instance = USART3;
+  huart2.Init.BaudRate = BAUDRATE_BL;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  HAL_UART_Init(&huart2);
 
+	  __HAL_RCC_DMA1_CLK_ENABLE();
+ 
+	hdma_bluetooth.Instance = DMA1_Stream1;
+	hdma_bluetooth.Init.Channel = DMA_CHANNEL_4;
+		
+	hdma_bluetooth.Init.Direction = DMA_PERIPH_TO_MEMORY;
+	hdma_bluetooth.Init.PeriphInc = DMA_PINC_DISABLE;
+	hdma_bluetooth.Init.MemInc = DMA_MINC_ENABLE;
+	hdma_bluetooth.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	hdma_bluetooth.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	hdma_bluetooth.Init.Mode = DMA_CIRCULAR;
+	hdma_bluetooth.Init.Priority = DMA_PRIORITY_HIGH;
+	hdma_bluetooth.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_bluetooth) != HAL_OK)
+    {
+     // _Error_Handler(__FILE__, __LINE__);
+    }
+
+    __HAL_LINKDMA(&huart2,hdmarx,hdma_bluetooth);
+
+    /* USART2 interrupt Init */
+    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
+
+
+}
+void MX_USART6_Init(void)
+{
+  huart_dmx.Instance = USART6;
+  huart_dmx.Init.BaudRate = BAUDRATE;
+  huart_dmx.Init.WordLength = UART_WORDLENGTH_8B;
+  huart_dmx.Init.StopBits = UART_STOPBITS_2;
+  huart_dmx.Init.Parity = UART_PARITY_NONE;
+  huart_dmx.Init.Mode = UART_MODE_TX_RX;
+  huart_dmx.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart_dmx.Init.OverSampling = UART_OVERSAMPLING_16;
+  HAL_UART_Init(&huart_dmx);
+}
+void USART_Config(void)
+{
+
+		GPIO_InitTypeDef GPIO_InitStruct;
+		__HAL_RCC_USART3_CLK_ENABLE();
+  
+    /**USART1 GPIO Configuration    
+    PB11     ------> USART3_RX
+    PD8     ------> USART3_TX 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_8;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  
+
+  
+  
+
+ /* Configure DMA Initialization Structure */
+//  __HAL_RCC_DMA1_CLK_ENABLE();
+// 
+//	hdma_uart.Instance=DMA1_Stream1;
+//  hdma_uart.Init.Channel = DMA_CHANNEL_4;
+//  hdma_uart.Init.Direction = DMA_PERIPH_TO_MEMORY;
+//  hdma_uart.Init.PeriphInc = DMA_PINC_DISABLE;
+//  hdma_uart.Init.MemInc = DMA_MINC_ENABLE;
+//  hdma_uart.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+//  hdma_uart.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+//  hdma_uart.Init.Mode = DMA_CIRCULAR;
+//  hdma_uart.Init.Priority = DMA_PRIORITY_HIGH;
+//  hdma_uart.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+//  //hdma_adc1.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+// // hdma_adc1.Init.MemBurst = DMA_MBURST_SINGLE;
+//  //hdma_adc1.Init.PeriphBurst = DMA_PBURST_SINGLE;
+////	hdma_adc1.XferCpltCallback=INT_DMA;
+//  HAL_DMA_Init(&hdma_uart);
+//	__HAL_LINKDMA(&huart2,hdmarx,hdma_uart);
+//  /* DMA interrupt init */
+//	__HAL_DMA_ENABLE_IT(&hdma_uart,DMA_IT_TC);
+	
+
+
+
+}
 /** 
   * Enable DMA controller clock
   */
@@ -371,11 +488,12 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
 
+ 
 
   /*Configure GPIO pin : LD4_Pin */
   GPIO_InitStruct.Pin = LD4_Pin;

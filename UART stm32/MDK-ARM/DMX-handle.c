@@ -3,12 +3,14 @@
 #include "stdlib.h"
 #include "LCD.h"
 extern ADC_HandleTypeDef hadc1;
-extern DMA_HandleTypeDef hdma_adc1;
+extern DMA_HandleTypeDef hdma_adc1,hdma_uart;
 extern TIM_HandleTypeDef htim2,htim3;
-extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart1,huart2;
 extern uint8_t rowCheck , colCheck ;
+extern MODE_STATE mode;
 char v_display_buffer[2][17]={"",""};
 uint8_t v_state=SELECT_ADD;
+uint8_t button=0;
 stSET set[DMX_NUMBER_SET];
 uint8_t element_arr_scanner=0;
 uint8_t element_arr_scene=0;
@@ -20,19 +22,19 @@ uint8_t len_cur=0;
 volatile uint8_t flag_timer2=1;
 static uint8_t out_set_cur=0;
 static uint8_t out_scene_cur=0;
-extern uint8_t dmxData[DMX_CHANNELS+1];
+extern uint8_t dmxData[DMX_CHANNELS];
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 void (*scene_current)(void);
 //void set_timer(uint32_t time);
-char *dmx_getstring();
-static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n );
+char *dmx_getstring(void);
+/*static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n );
 static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n )
 {
 	for(int i=0;i<n;i++)
 	{
 		des[i]=src[i];
 	}
-}
+}*/
 void dmx_main()
 {
 
@@ -57,11 +59,15 @@ void dmx_main()
 					lcd_home();
 					lcd_write_string("   SELECT SPEED    Press A ");
 					char *tmp1;
-					while(v_state!=YES)
+					do
 					{
-						tmp1=dmx_getstring();
+						button=0;
 						free(tmp1);
-					}
+						tmp1=dmx_getstring();
+						
+					}while(button!=YES);
+					
+					free(tmp1);
 					HAL_ADC_Stop_DMA(&hadc1);
 					v_state=PLAYING;
 					lcd_clear();
@@ -107,9 +113,7 @@ char *dmx_getstring()
 	
 	while(buf!=SELECT_ADD&&buf!=YES&&buf!=NO&&buf!=SELECT_AUTO&&count<4)
 	{
-
 		tmplen=strlen(string);
-		
 		if(buf==KEYPAD4x4__VALUE_multi)
 		{
 			if(tmplen>0)
@@ -142,25 +146,28 @@ char *dmx_getstring()
 	//append(string,buf,0);
 	//append(v_display_buffer,buf,0);
 	}
-		if(buf==NO)
+	if(buf==NO)
 			{
 				free(string);
 				string=NULL;
-				v_state=NO;
+			//	v_state=NO;
+				button=NO;
 				
 			}
-		else if(buf==YES)
+	else if(buf==YES)
 			{
 				free(string);
 				string=NULL;
-				v_state=YES;
+				//v_state=YES;
+				button=YES;
 				
 			}
-		else if(buf==SELECT_AUTO)
+	else if(buf==SELECT_AUTO)
 			{
 				free(string);
 				string=NULL;
 				v_state=SELECT_AUTO;
+				button=SELECT_AUTO;
 				
 			}
 	return string;
@@ -197,13 +204,16 @@ void dmx_add_group(SCENE *scene,uint8_t *arr)
 	lcd_clear();
 	lcd_home();
 	lcd_write_string("select effect    press A");
-	
-	while(v_state!=YES)
+//	uint8_t temp1 =v_state;
+	do
 	{
-		tmp1=dmx_getstring();
+		button=0;
 		free(tmp1);
-	}
-	v_state=SELECT_ADD;
+		tmp1=dmx_getstring();
+		
+	}while(button!=YES);
+	
+	free(tmp1);
 	HAL_ADC_Stop_DMA(&hadc1);
 }
 void dmx_add_scene(SCENE *scene)
@@ -298,6 +308,7 @@ void dmx_out_scene(SCENE *scene)
 		dmx_out_scanner(&(scene->scanner[out_scene_cur]));
 	}*/
 }
+static uint8_t flagEndSet=0;
 void dmx_out_set(stSET *set1)
 {
 /*	for(int i=0;i<set1->len;i++)
@@ -312,6 +323,7 @@ void dmx_out_set(stSET *set1)
 	}
 	else
 	{
+		flagEndSet=1;
 		out_scene_cur=0;
 		memset(dmxData,0,DMX_CHANNELS);
 		dmx_out_scene(&(set1->scene[out_scene_cur]));
@@ -329,12 +341,17 @@ void dmx_auto_play()
 			dmx_out_set(&set[count]);
 		else
 		{
-	//		count=0;
+			count=0;
 			dmx_out_set(&set[count]);
 		}
 		//set_timer(1000);
 	}
-	//count++;
+	if(flagEndSet==1)
+		{
+			count++;
+			flagEndSet=0;
+		}
+			
 }
 
 
@@ -397,7 +414,55 @@ void dmx_add_set(stSET *SET)
 	}
 	free(tmp1);
 }
-HAL_StatusTypeDef save_set(stSET set)
+
+
+
+void dmx_select_mode()
+{
+	uint8_t key;
+	lcd_write_string("Press B or C to select mode: ");
+
+	do
+		{
+			
+			key=KeyPad_getKey(GET_CHAR);
+			if(key==KEYPAD4x4__VALUE_B)
+				{
+					mode++;
+					if(mode>=3)
+						mode=MANUAL;
+				}
+				if(key==KEYPAD4x4__VALUE_C)
+					{
+					
+					if(mode==0)
+						mode=PC;
+					else
+						mode--;
+
+		    	}
+					lcd_clear();
+					HAL_Delay(50);
+					lcd_setCursor(0,0);
+					HAL_Delay(100);
+					lcd_write_string("Mode present: ");
+					HAL_Delay(10);
+				if(mode==MANUAL)
+						lcd_write_string("MANUAL");
+					else 	if(mode==ANDROID)
+								lcd_write_string("ANDROID");
+					else 	if(mode==PC)
+								lcd_write_string("PC ");
+		}
+			while(key!=YES);
+			lcd_write_string(" OK");
+			
+}
+void DMX_GPIO_PIN_WRITE(GPIO_PinState st)
 {
 	
+	if(mode==ANDROID||mode==MANUAL)
+		HAL_GPIO_WritePin(DMX_TX_GPIO_Port_MANUAL,DMX_TX_Pin_MANUAL,st);
+	if(mode==PC)
+		HAL_GPIO_WritePin(DMX_TX_GPIO_Port_PC,DMX_TX_Pin_PC,st);
 }

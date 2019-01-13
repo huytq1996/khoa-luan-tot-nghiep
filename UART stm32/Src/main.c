@@ -1,38 +1,31 @@
 #include "stm32f4xx_hal.h"
 #include "string.h"
 #include "KeyPad.h"
-#include "DMX-Init.h"
+//#include "DMX-Init.h"
 #include "DMX-handle.h"
 #include "eeprom.h"
 #include "LCD.h"
+#include "usb_device.h"
+#include "usbd_cdc_if.h"
+
+char dataReceive[15];
+uint8_t databluetooth[6];
+uint8_t address, red, green, blue;
 uint16_t VirtAddVarTab[NB_OF_VAR] = {0x5555, 0x6666, 0x7777};
 uint16_t VarDataTab[NB_OF_VAR] = {0, 0, 0};
 uint16_t VarValue,VarDataTmp = 0;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 I2C_HandleTypeDef hi2c1;
-UART_HandleTypeDef huart1;
-DMA_HandleTypeDef hdma_adc1;
+UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart_dmx;
+DMA_HandleTypeDef hdma_adc1,hdma_uart, hdma_bluetooth;
 volatile uint8_t dmxSendState;
- ADC_HandleTypeDef hadc1;
- uint32_t key=0;
+ADC_HandleTypeDef hadc1;
+uint32_t key=0;
 uint32_t adcbuf[DMX_NUMBER_ADC];
 uint16_t t,t1;
-void Error()
-{
-	
-	if(t1==HAL_OK)
-		__nop();
-				//printf("FLASH_COMPLETE\n");
-	
-	else if(t1==PAGE_FULL)
-			__nop();
-	 		//printf("PAGE_FULL\n");
-	else if(t1==NO_VALID_PAGE)
-			__nop();
-        //printf("NO_VALID_PAGE\n");
-}
-
+volatile MODE_STATE mode;
 
 
 
@@ -43,68 +36,99 @@ int main(void)
   SystemClock_Config();
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-	MX_ADC1_Init();
-  MX_DMA_Init();
-  MX_USART1_UART_Init();
-  MX_TIM2_Init();
-	MX_TIM3_Init();
-  MX_I2C1_Init();
+	MX_I2C1_Init();// Init LCD
+	KeyPad_init();
+	lcd_init(16,2);
+	lcd_clear();
+ dmx_select_mode();
+	switch(mode)
+		{
+
+		case MANUAL:
+				MX_ADC1_Init();
+				MX_DMA_Init();
+				MX_USART1_UART_Init(MANUAL);
+				MX_TIM3_Init();		
+				
+			
+				htim3.Instance->CNT = 0;
+				htim3.Instance->ARR=1000;
+				break;
+			case ANDROID: 
+				MX_USART1_UART_Init(ANDROID);
+				MX_USART3_UART_Init();
+				USART_Config();
+				
+				HAL_UART_Receive_DMA(&huart2,databluetooth,6);
+			
+				break;
+			case PC:
+				 MX_USB_DEVICE_Init();
+			//	MX_USART6_Init();
+				MX_USART1_UART_Init(PC);
+				break;
+		}
+	
+
+
   /* Initialize interrupts */
-  MX_NVIC_Init();
-	DMX_DisableUsart(&huart1);
-	HAL_GPIO_WritePin(DMX_TX_GPIO_Port,DMX_TX_Pin,GPIO_PIN_SET);
+	
+	DMX_GPIO_Init();
+	MX_NVIC_Init();
+  MX_TIM2_Init();
+	DMX_DisableUsart(&huart_dmx);
+	DMX_GPIO_PIN_WRITE(GPIO_PIN_SET);
 	//HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12,GPIO_PIN_SET);
-//	HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,GPIO_PIN_SET);
+//HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,GPIO_PIN_SET);
 	dmxSendState=STATE_MBB;
 	htim2.Instance->CNT = 0;
 	HAL_TIM_Base_Start_IT(&htim2);
-  KeyPad_init();
+
+		
+
+//	HAL_UART_Receive_DMA(&huart2,buferbl,1);
 //HAL_ADC_Start(&hadc1);
   //HAL_ADC_Start_DMA(&hadc1, adcbuf, DMX_NUMBER_ADC) ;
- // EE_Init();
+
     /* Start Conversation Error */
   //  Error_Handler(); 
 
-	htim3.Instance->CNT = 0;
-	htim3.Instance->ARR=2000;
-	HAL_TIM_Base_Start_IT(&htim2);
-	HAL_TIM_Base_Start_IT(&htim3);
-uint32_t PAGEError = 0;
-//t1=EE_Init();
-//Error();
-/*HAL_FLASH_Unlock();
-HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008000, 0);
-HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008000, 1);
-HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008004, 1);
-HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, 0x08008006, 1);
-
-t1=EE_WriteVariable(0,0x5555);Error();
-t1=EE_ReadVariable(0,&t);Error();
-
-FLASH_EraseInitTypeDef EraseInitStruct;
-EraseInitStruct.TypeErase   = FLASH_TYPEPROGRAM_BYTE;
-EraseInitStruct.Sector   = FLASH_SECTOR_2;
-EraseInitStruct.NbSectors = 1; 
-EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
-__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
-HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError);
+	//HAL_TIM_Base_Start_IT(&htim2);
+	
+//HAL_TIM_Base_Start_IT(&htim3);
 
 
-HAL_FLASH_Lock();
-t=*((uint16_t*)(0x08008004));
-t++;
-*((uint16_t*)(0x08008004))=0xFFFF;*/
 
-	lcd_init(16,2);
+
+	
+//HAL_UART_Receive_IT(&huart2,(uint8_t*)dataReceive,1);
+	/*lcd_init(16,2);
 	lcd_clear();
 	lcd_setCursor(0,0);
-	HAL_Delay(1000);
+	HAL_Delay(1000);*/
+	//HAL_UART_Transmit_IT(&huart2,"A",1);
+
+		
   while (1)
  {
-	
-			dmx_main();
+	 	switch(mode)
+		{
+			case MANUAL:
+			
+				dmx_main();
+				break;
+			case ANDROID: 
+		
+		
+				break;
+			case PC: break;
+			default : break;
+		}
+		//HAL_UART_Transmit(&huart2,"a",1,10);
+	//	HAL_UART_Receive_IT(&huart2,buff,1);
 		//key=KeyPad_getascii(KeyPad_press());
-		HAL_Delay(200);
+	//	HAL_TIM_Base_Start_IT(&htim2);
+		HAL_Delay(700);
 
 
   }
