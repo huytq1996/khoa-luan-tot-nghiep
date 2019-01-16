@@ -8,7 +8,7 @@
 #define STATE_DMA 8
 
 #define BAUDRATE 250000
-#define BAUDRATE_BL 9600
+#define BAUDRATE_BL 115200
 
 #define MARK_BETWEEN 10
 #define MARK_BEFORE_BREAK 70//64
@@ -21,10 +21,9 @@
 #define DMX_NUMBER_SCANNER 20
 #define DMX_NUMBER_SET 5
 #define DMX_START_CODE 0
-#define DMX_TX_GPIO_Port_PC GPIOB
-#define DMX_TX_Pin_PC GPIO_PIN_4
-#define DMX_TX_GPIO_Port_MANUAL GPIOB
-#define DMX_TX_Pin_MANUAL GPIO_PIN_4
+#define DMX_TX_Port GPIOC
+#define DMX_TX_Pin GPIO_PIN_8
+
 #define DMX_ADC_C1_Port GPIOA
 #define DMX_ADC_C1_Pin GPIO_PIN_0
 #define DMX_ADC_C2_Port GPIOA
@@ -86,12 +85,11 @@ typedef struct
 }stSET;
 void MX_USART3_UART_Init(void);
 void MX_GPIO_Init(void);
-void USART_Config(void);
+static void USART_Config(void);
 void SystemClock_Config(void);
 void MX_I2C1_Init(void);
 void MX_GPIO_Init(void);
 void MX_DMA_Init(void);
-void MX_USART1_UART_Init(MODE_STATE a);
 void MX_TIM2_Init(void);
 void MX_TIM3_Init(void);
 void MX_ADC1_Init(void);

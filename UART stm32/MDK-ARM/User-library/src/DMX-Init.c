@@ -9,7 +9,7 @@ extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef huart_dmx;
 extern volatile uint8_t dmxSendState;
 extern MODE_STATE mode;
-uint8_t dmxData[DMX_CHANNELS]={100,100,100,100,100};
+uint8_t dmxData[DMX_CHANNELS+1]={0};
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 void MX_I2C1_Init(void)
 {
@@ -44,10 +44,10 @@ void DMX_GPIO_DeInit()
   /*Configure GPIO pin : PD10 */
 	GPIO_InitTypeDef GPIO_InitStruct;
 	
-		GPIO_InitStruct.Pin = DMX_TX_Pin_MANUAL;
+		GPIO_InitStruct.Pin = DMX_TX_Pin;
 		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(DMX_TX_GPIO_Port_MANUAL, &GPIO_InitStruct);
+		HAL_GPIO_Init(DMX_TX_Port, &GPIO_InitStruct);
 	
 
   
@@ -59,36 +59,35 @@ void DMX_GPIO_Init()
 	GPIO_InitTypeDef GPIO_InitStruct;
 		
 	
-		GPIO_InitStruct.Pin = DMX_TX_Pin_MANUAL;
+		GPIO_InitStruct.Pin = DMX_TX_Pin;
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(DMX_TX_GPIO_Port_MANUAL, &GPIO_InitStruct);
+		HAL_GPIO_Init(DMX_TX_Port, &GPIO_InitStruct);
 	
-		if(mode==ANDROID||mode==MANUAL)
-	{
-		GPIO_InitStruct.Pin = GPIO_PIN_6;
-		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-	}
-	if(mode==PC)
-	{
-		GPIO_InitStruct.Pin = GPIO_PIN_6;
-		GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	}
+
 }
-void DMX_DisableUsart(UART_HandleTypeDef *huart1) {
-	HAL_UART_MspDeInit(huart1);
+void DMX_DisableUsart(UART_HandleTypeDef *huart1) 
+{
+	//	HAL_UART_MspDeInit(huart1);
+	  __HAL_RCC_USART6_CLK_DISABLE();
+    HAL_GPIO_DeInit(GPIOC,GPIO_PIN_6);//C6 TX
+    /* USART1 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(USART6_IRQn);
 }
 
 void DMX_EnableUsart(UART_HandleTypeDef *huart1) {
-
-	HAL_UART_MspInit(huart1);
-	if(huart1->Instance==USART1)
-		HAL_NVIC_EnableIRQ(USART1_IRQn);
-	if(huart1->Instance==USART6)
+	 GPIO_InitTypeDef GPIO_InitStruct;
+	    /**USART6 GPIO Configuration    
+    PC6     ------> USART6_TX
+    PC7     ------> USART6_RX 
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF8_USART6;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	 __HAL_RCC_USART6_CLK_ENABLE();
 		HAL_NVIC_EnableIRQ(USART6_IRQn);
 }
 
@@ -144,12 +143,11 @@ void MX_NVIC_Init(void)
   /* TIM2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(TIM2_IRQn);
-	//
-  /* USART1_IRQn interrupt configuration */
+
+	HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(USART6_IRQn);
 	if(mode==MANUAL)
   {
-	 HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(ADC_IRQn);
 	HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
@@ -165,14 +163,8 @@ void MX_NVIC_Init(void)
 		HAL_NVIC_EnableIRQ(USART3_IRQn);
 		HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
 		HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
-		 HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-		HAL_NVIC_EnableIRQ(USART1_IRQn);
 	}
-else if (mode== PC)
-	{
-		HAL_NVIC_SetPriority(USART6_IRQn, 0, 0);
-		HAL_NVIC_EnableIRQ(USART6_IRQn);
-	}
+
 }
 
 /* ADC1 init function */
@@ -304,28 +296,26 @@ void MX_TIM3_Init(void)
 
 }
 /* USART1 init function */
-void MX_USART1_UART_Init(MODE_STATE a)
-{
-if(a==MANUAL||a==ANDROID)
-  {
-		huart_dmx.Instance = USART1;
-	}
-else if (a== PC)
-	{
-		huart_dmx.Instance = USART6;
-	}
-  huart_dmx.Init.BaudRate = BAUDRATE;
-  huart_dmx.Init.WordLength = UART_WORDLENGTH_8B;
-  huart_dmx.Init.StopBits = UART_STOPBITS_2;
-  huart_dmx.Init.Parity = UART_PARITY_NONE;
-  huart_dmx.Init.Mode = UART_MODE_TX_RX;
-  huart_dmx.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart_dmx.Init.OverSampling = UART_OVERSAMPLING_16;
-  HAL_UART_Init(&huart_dmx);
-	
+//void MX_USART1_UART_Init(MODE_STATE a)
+//{
+//if(a==MANUAL||a==ANDROID)
+//  {
+//		huart_dmx.Instance = USART1;
+//	}
+//else if (a== PC)
+//	{
+//		huart_dmx.Instance = USART6;
+//	}
+//  huart_dmx.Init.BaudRate = BAUDRATE;
+//  huart_dmx.Init.WordLength = UART_WORDLENGTH_8B;
+//  huart_dmx.Init.StopBits = UART_STOPBITS_2;
+//  huart_dmx.Init.Parity = UART_PARITY_NONE;
+//  huart_dmx.Init.Mode = UART_MODE_TX_RX;
+//  huart_dmx.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+//  huart_dmx.Init.OverSampling = UART_OVERSAMPLING_16;
+//  HAL_UART_Init(&huart_dmx);
 
-
-}
+//}
 void MX_USART3_UART_Init(void)
 {
 	USART_Config();
@@ -350,7 +340,7 @@ void MX_USART3_UART_Init(void)
 	hdma_bluetooth.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
 	hdma_bluetooth.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
 	hdma_bluetooth.Init.Mode = DMA_CIRCULAR;
-	hdma_bluetooth.Init.Priority = DMA_PRIORITY_HIGH;
+	hdma_bluetooth.Init.Priority = DMA_PRIORITY_LOW;
 	hdma_bluetooth.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_bluetooth) != HAL_OK)
     {
@@ -367,6 +357,20 @@ void MX_USART3_UART_Init(void)
 }
 void MX_USART6_Init(void)
 {
+	GPIO_InitTypeDef GPIO_InitStruct;
+		/**USART6 GPIO Configuration    
+	PC6     ------> USART6_TX
+	PC7     ------> USART6_RX 
+	*/
+	__HAL_RCC_USART6_CLK_ENABLE();
+	GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF8_USART6;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	
   huart_dmx.Instance = USART6;
   huart_dmx.Init.BaudRate = BAUDRATE;
   huart_dmx.Init.WordLength = UART_WORDLENGTH_8B;
@@ -377,7 +381,7 @@ void MX_USART6_Init(void)
   huart_dmx.Init.OverSampling = UART_OVERSAMPLING_16;
   HAL_UART_Init(&huart_dmx);
 }
-void USART_Config(void)
+static void USART_Config(void)
 {
 
 		GPIO_InitTypeDef GPIO_InitStruct;
@@ -400,37 +404,6 @@ void USART_Config(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  
-
-  
-  
-
- /* Configure DMA Initialization Structure */
-//  __HAL_RCC_DMA1_CLK_ENABLE();
-// 
-//	hdma_uart.Instance=DMA1_Stream1;
-//  hdma_uart.Init.Channel = DMA_CHANNEL_4;
-//  hdma_uart.Init.Direction = DMA_PERIPH_TO_MEMORY;
-//  hdma_uart.Init.PeriphInc = DMA_PINC_DISABLE;
-//  hdma_uart.Init.MemInc = DMA_MINC_ENABLE;
-//  hdma_uart.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-//  hdma_uart.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-//  hdma_uart.Init.Mode = DMA_CIRCULAR;
-//  hdma_uart.Init.Priority = DMA_PRIORITY_HIGH;
-//  hdma_uart.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-//  //hdma_adc1.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
-// // hdma_adc1.Init.MemBurst = DMA_MBURST_SINGLE;
-//  //hdma_adc1.Init.PeriphBurst = DMA_PBURST_SINGLE;
-////	hdma_adc1.XferCpltCallback=INT_DMA;
-//  HAL_DMA_Init(&hdma_uart);
-//	__HAL_LINKDMA(&huart2,hdmarx,hdma_uart);
-//  /* DMA interrupt init */
-//	__HAL_DMA_ENABLE_IT(&hdma_uart,DMA_IT_TC);
-	
-
-
-
 }
 /** 
   * Enable DMA controller clock
@@ -464,21 +437,7 @@ void MX_DMA_Init(void)
 
 }
 
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-     PC3   ------> I2S2_SD
-     PA4   ------> I2S3_WS
-     PA5   ------> SPI1_SCK
-     PA6   ------> SPI1_MISO
-     PA7   ------> SPI1_MOSI
-     PB10   ------> I2S2_CK
-     PC10   ------> I2S3_CK
-     PC12   ------> I2S3_SD
-*/
+
 void MX_GPIO_Init(void)
 {
 

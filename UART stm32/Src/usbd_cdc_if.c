@@ -267,7 +267,7 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 
 extern char dataReceive[15];
 extern uint8_t address, red, green, blue;
-extern uint8_t dmxData[DMX_CHANNELS];
+extern uint8_t dmxData[DMX_CHANNELS+1];
 static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */

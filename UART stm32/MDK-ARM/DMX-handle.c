@@ -9,6 +9,7 @@ extern UART_HandleTypeDef huart1,huart2;
 extern uint8_t rowCheck , colCheck ;
 extern MODE_STATE mode;
 char v_display_buffer[2][17]={"",""};
+static uint8_t flagEndSet=0;
 uint8_t v_state=SELECT_ADD;
 uint8_t button=0;
 stSET set[DMX_NUMBER_SET];
@@ -19,22 +20,15 @@ SCENE scene_select[DMX_NUMBER_SCENE];
 SCENE *scene_cur=NULL;
 uint8_t *arr_cur=NULL;
 uint8_t len_cur=0;
-volatile uint8_t flag_timer2=1;
-static uint8_t out_set_cur=0;
+//volatile uint8_t flag_timer2=1;
+//static uint8_t out_set_cur=0;
 static uint8_t out_scene_cur=0;
-extern uint8_t dmxData[DMX_CHANNELS];
+extern uint8_t dmxData[DMX_CHANNELS+1];
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 void (*scene_current)(void);
 //void set_timer(uint32_t time);
-char *dmx_getstring(void);
-/*static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n );
-static void copyarr(uint8_t *des, const uint8_t *src,uint8_t n )
-{
-	for(int i=0;i<n;i++)
-	{
-		des[i]=src[i];
-	}
-}*/
+void dmx_getstring(char *pString,uint8_t option);
+
 void dmx_main()
 {
 
@@ -58,16 +52,7 @@ void dmx_main()
 					lcd_clear();
 					lcd_home();
 					lcd_write_string("   SELECT SPEED    Press A ");
-					char *tmp1;
-					do
-					{
-						button=0;
-						free(tmp1);
-						tmp1=dmx_getstring();
-						
-					}while(button!=YES);
-					
-					free(tmp1);
+					while(	KeyPad_getKey(GET_CHAR)!=YES);
 					HAL_ADC_Stop_DMA(&hadc1);
 					v_state=PLAYING;
 					lcd_clear();
@@ -82,43 +67,26 @@ void dmx_main()
 			
 	}
 }
-/*static void append(char subject[], const char insert[], int pos) {
- 
-		uint8_t len = strlen(subject) + strlen(insert) + 2;
-		
-			
-		char *buf = (char*)malloc(len);
-		memset(buf, 0, 100);
-    strncpy(buf, subject, pos); // copy at most first pos characters
-    len = strlen(buf);
-    strcpy(buf+len, insert); // copy all of insert[] at the end
-    len += strlen(insert);  // increase the length by length of insert[]
-    strcpy(buf+len, subject+pos); // copy the rest
-		if(strlen(buf)>=MaxString)
-    buf[16]=0;  // copy it back to subject
-		strcpy(subject, buf); 
-    // Note that subject[] must be big enough, or else segfault.
-    // deallocate buf[] here, if used malloc()
-    // e.g. free(buf);
-		free(buf);
-}*/
-//char string[17]="";
 
-char *dmx_getstring()
+
+void dmx_getstring(char *pString,uint8_t option)
 {
 	char buf=0;
-	char *string=calloc(1,5);
+	memset(pString,0,4);
 	uint8_t tmplen=0,count=0;
-	buf=KeyPad_getKey(GET_CHAR_NUM);
-	
-	while(buf!=SELECT_ADD&&buf!=YES&&buf!=NO&&buf!=SELECT_AUTO&&count<4)
+	buf=KeyPad_getKey(option);
+	if(option==GET_NUM)
+		{
+			option =GET_CHAR_NUM;
+		}
+	while(/*buf!=SELECT_ADD&&buf!=YES&&buf!=NO&&buf!=SELECT_AUTO&&*/count<4)
 	{
-		tmplen=strlen(string);
+		tmplen=strlen(pString);
 		if(buf==KEYPAD4x4__VALUE_multi)
 		{
 			if(tmplen>0)
 			{
-				string[tmplen-1]=0;
+				pString[tmplen-1]=0;
 			  lcd_setCursor(rowCheck,colCheck-1);
 				lcd_write(' ');
 				lcd_setCursor(rowCheck,colCheck-1);
@@ -133,97 +101,89 @@ char *dmx_getstring()
 		{
 			if(checknum(buf)&&count!=3)
 			{
-					string[tmplen]=KeyPad_getascii(buf);
-					lcd_write(string[tmplen]);
+					pString[tmplen]=KeyPad_getascii(buf);
+					lcd_write(pString[tmplen]);
 					count++;
-					string[tmplen+1]=0;
+					pString[tmplen+1]=0;
 			}
 		}
-		
-		
 		buf=  KeyPad_getKey(GET_CHAR_NUM);
-	
-	//append(string,buf,0);
-	//append(v_display_buffer,buf,0);
-	}
-	if(buf==NO)
+			if(buf==NO)
 			{
-				free(string);
-				string=NULL;
+			//	free(pString);
+			//	pString=NULL;
 			//	v_state=NO;
 				button=NO;
-				
+		//		return ;
 			}
 	else if(buf==YES)
 			{
-				free(string);
-				string=NULL;
+			//	free(pString);
+				//pString=NULL;
 				//v_state=YES;
 				button=YES;
-				
+				return;
 			}
 	else if(buf==SELECT_AUTO)
 			{
-				free(string);
-				string=NULL;
-				v_state=SELECT_AUTO;
+			//	free(pString);
+				//pString=NULL;
+				//v_state=SELECT_AUTO;
 				button=SELECT_AUTO;
-				
+			//	return ;
 			}
-	return string;
-}
-void dmx_add_group(SCENE *scene,uint8_t *arr)
-{
-	char temp[32]="";
-	uint8_t num=0,len=0;
-	char *tmp1;
-
-//nhap so luong den cua group 
-	tmp1=dmx_getstring();
-	len=atoi(tmp1);
-	scene->len+=len;
-	for(int i=0;i<len;i++)
-	{//nhap dia chi den 1
-		lcd_clear();
-		lcd_home();
-		sprintf(temp,"Addr of scanner %d: ",i+1);
-		lcd_write_string(temp);
-		tmp1=dmx_getstring();
-		num=atoi(tmp1);
-		arr[i]=num;
 	}
-	
-	scene_cur=scene;
-	arr_cur=arr;
-	len_cur=len;
-	
-	HAL_ADC_Start_DMA(&hadc1,adcbuf,DMX_NUMBER_ADC);
-	//dmx_add_scanner(scene,arr,len);
-//	tmp1=dmx_getstring();
-//	free(tmp1);
+
+
+}
+void dmx_select_set()
+{
+	//nhap so luong set
+	char tmp1[5]="";
+	//nhap so luong set
 	lcd_clear();
 	lcd_home();
-	lcd_write_string("select effect    press A");
-//	uint8_t temp1 =v_state;
-	do
-	{
-		button=0;
-		free(tmp1);
-		tmp1=dmx_getstring();
-		
-	}while(button!=YES);
+	lcd_write_string("number of profile: ");
 	
-	free(tmp1);
-	HAL_ADC_Stop_DMA(&hadc1);
+	dmx_getstring(tmp1,GET_NUM);
+	set_len=atoi(tmp1);
+	//set tung canh
+	for(int i=0;i<set_len;i++)
+	{
+		char temp[32]="";
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"number scene of profile %d: ",i+1);
+		lcd_write_string(temp);
+		dmx_add_set(&set[i]);
+		
+	}
+}
+void dmx_add_set(stSET *SET)
+{
+		
+	
+	char tmp1[5]="";
+	dmx_getstring(tmp1,GET_NUM);
+	SET->len=atoi(tmp1);
+		//set tung canh
+	for(int i=0;i<SET->len;i++)
+	{
+		//nhap canh thu i+1
+		char temp[32]="";
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"number group of scene %d: ",i+1);
+		lcd_write_string(temp);
+		dmx_add_scene(&(SET->scene[i]));		
+	}
+
 }
 void dmx_add_scene(SCENE *scene)
 {
 	uint8_t group;
-	char *tmp1;
-  
-//nhap so luong group
-
-	tmp1=dmx_getstring();
+	char tmp1[5]="";
+	dmx_getstring(tmp1,GET_NUM);
 	group=atoi(tmp1);
 	scene->len=0;
 	for(int i=0;i<group;i++)
@@ -237,8 +197,40 @@ void dmx_add_scene(SCENE *scene)
 		lcd_write_string(temp);
 		dmx_add_group(scene,arr);
 	}
-		free(tmp1);
+	
 }
+void dmx_add_group(SCENE *scene,uint8_t *arr)
+{
+	char temp[32]="";
+	uint8_t num=0,len=0;
+	char tmp1[5]="";
+	dmx_getstring(tmp1,GET_NUM);
+	len=atoi(tmp1);
+	scene->len+=len;
+	for(int i=0;i<len;i++)
+	{//nhap dia chi den 1
+		lcd_clear();
+		lcd_home();
+		sprintf(temp,"Addr of scanner %d: ",i+1);
+		lcd_write_string(temp);
+		dmx_getstring(tmp1,GET_NUM);
+		num=atoi(tmp1);
+		arr[i]=num;
+	}
+	
+	scene_cur=scene;
+	arr_cur=arr;
+	len_cur=len;
+	
+	HAL_ADC_Start_DMA(&hadc1,adcbuf,DMX_NUMBER_ADC);
+
+	lcd_clear();
+	lcd_home();
+	lcd_write_string("select effect    press A");
+	while(	KeyPad_getKey(GET_CHAR)!=YES);
+	HAL_ADC_Stop_DMA(&hadc1);
+}
+
 void dmx_scan_color(SCENE *scene,uint8_t *arr,uint8_t len)
 {
 	
@@ -308,7 +300,7 @@ void dmx_out_scene(SCENE *scene)
 		dmx_out_scanner(&(scene->scanner[out_scene_cur]));
 	}*/
 }
-static uint8_t flagEndSet=0;
+
 void dmx_out_set(stSET *set1)
 {
 /*	for(int i=0;i<set1->len;i++)
@@ -355,65 +347,7 @@ void dmx_auto_play()
 }
 
 
-void dmx_select_set()
-{
-	//nhap so luong set
-	char *tmp1;
-	//nhap so luong set
-	lcd_clear();
-	lcd_home();
-	lcd_write_string("number of profile: ");
-	
-	tmp1=dmx_getstring();
-	set_len=atoi(tmp1);
-	//set tung canh
-	for(int i=0;i<set_len;i++)
-	{
-		char temp[32]="";
-		lcd_clear();
-		lcd_home();
-		sprintf(temp,"number scene of profile %d: ",i+1);
-		lcd_write_string(temp);
-		dmx_add_set(&set[i]);
-		
-	}
-	lcd_clear();
-	lcd_home();
-	lcd_write_string(" press # to play ");
-	tmp1=dmx_getstring();
-	
-	free(tmp1);
 
-	while(v_state!=SELECT_AUTO)
-	{
-	tmp1=dmx_getstring();
-
-	free(tmp1);	
-	}
-
-}
-void dmx_add_set(stSET *SET)
-{
-		
-	
-	char *tmp1;
-	//nhap so luong canh
-	
-	tmp1=dmx_getstring();
-	SET->len=atoi(tmp1);
-		//set tung canh
-	for(int i=0;i<SET->len;i++)
-	{
-		//nhap canh thu i+1
-		char temp[32]="";
-		lcd_clear();
-		lcd_home();
-		sprintf(temp,"number group of scene %d: ",i+1);
-		lcd_write_string(temp);
-		dmx_add_scene(&(SET->scene[i]));		
-	}
-	free(tmp1);
-}
 
 
 
@@ -460,9 +394,5 @@ void dmx_select_mode()
 }
 void DMX_GPIO_PIN_WRITE(GPIO_PinState st)
 {
-	
-	if(mode==ANDROID||mode==MANUAL)
-		HAL_GPIO_WritePin(DMX_TX_GPIO_Port_MANUAL,DMX_TX_Pin_MANUAL,st);
-	if(mode==PC)
-		HAL_GPIO_WritePin(DMX_TX_GPIO_Port_PC,DMX_TX_Pin_PC,st);
+		HAL_GPIO_WritePin(DMX_TX_Port,DMX_TX_Pin,st);
 }

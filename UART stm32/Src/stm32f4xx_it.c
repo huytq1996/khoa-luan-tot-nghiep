@@ -45,7 +45,7 @@ extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim2,htim3;
 extern UART_HandleTypeDef huart_dmx;
 extern UART_HandleTypeDef huart2;
-
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -121,16 +121,7 @@ void TIM3_IRQHandler(void)
 /**
 * @brief This function handles USART1 global interrupt.
 */
-void USART1_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART1_IRQn 0 */
 
-  /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart_dmx);
-  /* USER CODE BEGIN USART1_IRQn 1 */
-
-  /* USER CODE END USART1_IRQn 1 */
-}
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
@@ -184,6 +175,15 @@ void DMA2_Stream0_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
 
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
