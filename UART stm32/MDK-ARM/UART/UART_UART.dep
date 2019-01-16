@@ -38,10 +38,10 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h)(0x59F2F7FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h)(0x59F2F7FF)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h)(0x59F2F7FF)
 F (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)()
-F (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)()
+F (.\User-library\inc\DMX-Init.h)(0x5C3E9445)()
 F (startup_stm32f407xx.s)(0x5C3B328C)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1"--list startup_stm32f407xx.lst --xref -o uart\startup_stm32f407xx.o --depend uart\startup_stm32f407xx.d)
 F (.\ADC-DMA.c)(0x5C14E153)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\adc-dma.o --omf_browse uart\adc-dma.crf --depend uart\adc-dma.d)
-F (.\DMX-handle.c)(0x5C3DBC7A)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\dmx-handle.o --omf_browse uart\dmx-handle.crf --depend uart\dmx-handle.d)
+F (.\DMX-handle.c)(0x5C3E94EA)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\dmx-handle.o --omf_browse uart\dmx-handle.crf --depend uart\dmx-handle.d)
 I (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x59F2F7FF)
 I (..\Inc\stm32f4xx_hal_conf.h)(0x5C15ADDF)
@@ -83,7 +83,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h)(0x59F2F7FF)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B9154)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588B9154)
-I (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)
+I (.\User-library\inc\DMX-Init.h)(0x5C3E9445)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588B9154)
 I (.\User-library\inc\LCD.h)(0x5BE9145C)
 F (.\DMX-IT.c)(0x5C3D98B7)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\dmx-it.o --omf_browse uart\dmx-it.crf --depend uart\dmx-it.d)
@@ -128,7 +128,7 @@ I (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B9154)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588B9154)
-I (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)
+I (.\User-library\inc\DMX-Init.h)(0x5C3E9445)
 F (.\User-library\src\DMX-Init.c)(0x5C3DC397)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\dmx-init.o --omf_browse uart\dmx-init.crf --depend uart\dmx-init.d)
 I (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x59F2F7FF)
@@ -171,7 +171,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h)(0x59F2F7FF)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B9154)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588B9154)
-I (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)
+I (.\User-library\inc\DMX-Init.h)(0x5C3E9445)
 F (.\User-library\src\KeyPad.c)(0x5BD57FD5)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\keypad.o --omf_browse uart\keypad.crf --depend uart\keypad.d)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x59F2F7FF)
@@ -333,7 +333,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588B9154)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588B9154)
 I (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)
-I (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)
+I (.\User-library\inc\DMX-Init.h)(0x5C3E9445)
 I (..\Inc\eeprom.h)(0x58E5F7E5)
 I (.\User-library\inc\LCD.h)(0x5BE9145C)
 I (..\Inc\usb_device.h)(0x5C10424E)
@@ -794,7 +794,7 @@ I (..\Inc\usbd_ctlreq.h)(0x5C10424E)
 I (.\User-library\inc\DMX-handle.h)(0x5C17D5F2)
 I (.\User-library\inc\KeyPad.h)(0x5BE846AE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x588B9154)
-I (.\User-library\inc\DMX-Init.h)(0x5C3D96FE)
+I (.\User-library\inc\DMX-Init.h)(0x5C3E9445)
 F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c)(0x59F2F800)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Inc -I .\User-library\inc -I .\User-library\inc --C99-I.\RTE\_UART-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx --C99-o uart\stm32f4xx_hal_tim_ex.o --omf_browse uart\stm32f4xx_hal_tim_ex.crf --depend uart\stm32f4xx_hal_tim_ex.d)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x59F2F7FF)
 I (..\Inc\stm32f4xx_hal_conf.h)(0x5C15ADDF)

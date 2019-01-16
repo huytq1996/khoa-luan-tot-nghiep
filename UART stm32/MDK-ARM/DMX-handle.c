@@ -16,7 +16,7 @@ stSET set[DMX_NUMBER_SET];
 uint8_t element_arr_scanner=0;
 uint8_t element_arr_scene=0;
 uint8_t set_len=0;
-SCENE scene_select[DMX_NUMBER_SCENE];
+//SCENE scene_select[DMX_NUMBER_SCENE];
 SCENE *scene_cur=NULL;
 uint8_t *arr_cur=NULL;
 uint8_t len_cur=0;

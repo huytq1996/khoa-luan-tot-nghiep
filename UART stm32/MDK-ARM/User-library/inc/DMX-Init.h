@@ -17,9 +17,9 @@
 
 #define DMX_CHANNELS 512
 #define DMX_NUMBER_ADC 5
-#define DMX_NUMBER_SCENE 20
-#define DMX_NUMBER_SCANNER 20
-#define DMX_NUMBER_SET 5
+#define DMX_NUMBER_SCENE 16
+#define DMX_NUMBER_SCANNER 16
+#define DMX_NUMBER_SET 4
 #define DMX_START_CODE 0
 #define DMX_TX_Port GPIOC
 #define DMX_TX_Pin GPIO_PIN_8
@@ -75,12 +75,12 @@ typedef struct SCANNER
 typedef struct SCENE
 	{
 
-		SCANNER scanner[DMX_NUMBER_SCENE];
+		SCANNER scanner[DMX_NUMBER_SCANNER];
 		uint8_t len;
 	}SCENE;
 typedef struct 
 {
-	SCENE scene[16];
+	SCENE scene[DMX_NUMBER_SCENE];
 	uint8_t len;
 }stSET;
 void MX_USART3_UART_Init(void);
