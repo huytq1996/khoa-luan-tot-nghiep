@@ -1307,7 +1307,7 @@ Removing Unused input sections from the image.
     Removing dmx-handle.o(.rev16_text), (4 bytes).
     Removing dmx-handle.o(.revsh_text), (4 bytes).
     Removing dmx-handle.o(.rrx_text), (6 bytes).
-    Removing dmx-handle.o(i.dmx_scan_color), (112 bytes).
+    Removing dmx-handle.o(i.dmx_scan_color), (100 bytes).
     Removing dmx-it.o(.rev16_text), (4 bytes).
     Removing dmx-it.o(.revsh_text), (4 bytes).
     Removing dmx-it.o(.rrx_text), (6 bytes).
@@ -1834,7 +1834,7 @@ Removing Unused input sections from the image.
     Removing cdrcmple.o(.text), (48 bytes).
     Removing depilogue.o(.text), (186 bytes).
 
-534 unused section(s) (total 42512 bytes) removed from the image.
+534 unused section(s) (total 42500 bytes) removed from the image.
 
 ==============================================================================
 
@@ -2335,42 +2335,42 @@ Image Symbol Table
     i.checknum                               0x08006b06   Section        0  keypad.o(i.checknum)
     i.dmx_add_group                          0x08006b38   Section        0  dmx-handle.o(i.dmx_add_group)
     i.dmx_add_scanner                        0x08006c2c   Section        0  dmx-handle.o(i.dmx_add_scanner)
-    i.dmx_add_scene                          0x08006cd4   Section        0  dmx-handle.o(i.dmx_add_scene)
-    i.dmx_add_set                            0x08006d5c   Section        0  dmx-handle.o(i.dmx_add_set)
-    i.dmx_auto_play                          0x08006dd8   Section        0  dmx-handle.o(i.dmx_auto_play)
-    i.dmx_getstring                          0x08006e54   Section        0  dmx-handle.o(i.dmx_getstring)
-    i.dmx_main                               0x08006f24   Section        0  dmx-handle.o(i.dmx_main)
-    i.dmx_out_scanner                        0x08006fe4   Section        0  dmx-handle.o(i.dmx_out_scanner)
-    i.dmx_out_scene                          0x08007014   Section        0  dmx-handle.o(i.dmx_out_scene)
-    i.dmx_out_set                            0x08007034   Section        0  dmx-handle.o(i.dmx_out_set)
-    i.dmx_select_mode                        0x080070a8   Section        0  dmx-handle.o(i.dmx_select_mode)
-    i.dmx_select_set                         0x08007198   Section        0  dmx-handle.o(i.dmx_select_set)
-    i.free                                   0x08007240   Section        0  malloc.o(i.free)
-    i.lcd_clear                              0x08007290   Section        0  lcd.o(i.lcd_clear)
-    i.lcd_command                            0x080072a0   Section        0  lcd.o(i.lcd_command)
-    i.lcd_display                            0x080072b0   Section        0  lcd.o(i.lcd_display)
-    i.lcd_expanderWrite                      0x080072d0   Section        0  lcd.o(i.lcd_expanderWrite)
-    i.lcd_home                               0x080072fc   Section        0  lcd.o(i.lcd_home)
-    i.lcd_init                               0x08007320   Section        0  lcd.o(i.lcd_init)
-    i.lcd_pulseEnable                        0x080073bc   Section        0  lcd.o(i.lcd_pulseEnable)
-    i.lcd_send                               0x080073de   Section        0  lcd.o(i.lcd_send)
-    i.lcd_setCursor                          0x08007404   Section        0  lcd.o(i.lcd_setCursor)
-    i.lcd_write                              0x0800744c   Section        0  lcd.o(i.lcd_write)
-    i.lcd_write4bits                         0x0800748c   Section        0  lcd.o(i.lcd_write4bits)
-    i.lcd_write_string                       0x0800749e   Section        0  lcd.o(i.lcd_write_string)
-    i.main                                   0x080074c0   Section        0  main.o(i.main)
-    i.malloc                                 0x080075a4   Section        0  malloc.o(i.malloc)
-    .constdata                               0x08007610   Section       16  lcd.o(.constdata)
-    .constdata                               0x08007620   Section        8  stm32f4xx_hal_dma.o(.constdata)
-    flagBitshiftOffset                       0x08007620   Data           8  stm32f4xx_hal_dma.o(.constdata)
-    .constdata                               0x08007628   Section       16  stm32f4xx_hal_rcc.o(.constdata)
-    .constdata                               0x08007638   Section      129  ctype_o.o(.constdata)
-    .constdata                               0x080076bc   Section        4  ctype_o.o(.constdata)
-    table                                    0x080076bc   Data           4  ctype_o.o(.constdata)
+    i.dmx_add_scene                          0x08006cc8   Section        0  dmx-handle.o(i.dmx_add_scene)
+    i.dmx_add_set                            0x08006d50   Section        0  dmx-handle.o(i.dmx_add_set)
+    i.dmx_auto_play                          0x08006dc8   Section        0  dmx-handle.o(i.dmx_auto_play)
+    i.dmx_getstring                          0x08006e48   Section        0  dmx-handle.o(i.dmx_getstring)
+    i.dmx_main                               0x08006f18   Section        0  dmx-handle.o(i.dmx_main)
+    i.dmx_out_scanner                        0x08006fd8   Section        0  dmx-handle.o(i.dmx_out_scanner)
+    i.dmx_out_scene                          0x08007008   Section        0  dmx-handle.o(i.dmx_out_scene)
+    i.dmx_out_set                            0x08007024   Section        0  dmx-handle.o(i.dmx_out_set)
+    i.dmx_select_mode                        0x08007094   Section        0  dmx-handle.o(i.dmx_select_mode)
+    i.dmx_select_set                         0x08007184   Section        0  dmx-handle.o(i.dmx_select_set)
+    i.free                                   0x08007230   Section        0  malloc.o(i.free)
+    i.lcd_clear                              0x08007280   Section        0  lcd.o(i.lcd_clear)
+    i.lcd_command                            0x08007290   Section        0  lcd.o(i.lcd_command)
+    i.lcd_display                            0x080072a0   Section        0  lcd.o(i.lcd_display)
+    i.lcd_expanderWrite                      0x080072c0   Section        0  lcd.o(i.lcd_expanderWrite)
+    i.lcd_home                               0x080072ec   Section        0  lcd.o(i.lcd_home)
+    i.lcd_init                               0x08007310   Section        0  lcd.o(i.lcd_init)
+    i.lcd_pulseEnable                        0x080073ac   Section        0  lcd.o(i.lcd_pulseEnable)
+    i.lcd_send                               0x080073ce   Section        0  lcd.o(i.lcd_send)
+    i.lcd_setCursor                          0x080073f4   Section        0  lcd.o(i.lcd_setCursor)
+    i.lcd_write                              0x0800743c   Section        0  lcd.o(i.lcd_write)
+    i.lcd_write4bits                         0x0800747c   Section        0  lcd.o(i.lcd_write4bits)
+    i.lcd_write_string                       0x0800748e   Section        0  lcd.o(i.lcd_write_string)
+    i.main                                   0x080074b0   Section        0  main.o(i.main)
+    i.malloc                                 0x08007594   Section        0  malloc.o(i.malloc)
+    .constdata                               0x08007600   Section       16  lcd.o(.constdata)
+    .constdata                               0x08007610   Section        8  stm32f4xx_hal_dma.o(.constdata)
+    flagBitshiftOffset                       0x08007610   Data           8  stm32f4xx_hal_dma.o(.constdata)
+    .constdata                               0x08007618   Section       16  stm32f4xx_hal_rcc.o(.constdata)
+    .constdata                               0x08007628   Section      129  ctype_o.o(.constdata)
+    .constdata                               0x080076ac   Section        4  ctype_o.o(.constdata)
+    table                                    0x080076ac   Data           4  ctype_o.o(.constdata)
     .data                                    0x20000000   Section        4  system_stm32f4xx.o(.data)
     .data                                    0x20000004   Section       25  dmx-handle.o(.data)
     flagEndSet                               0x20000004   Data           1  dmx-handle.o(.data)
-    out_scene_cur                            0x20000015   Data           1  dmx-handle.o(.data)
+    out_scene_cur                            0x20000016   Data           1  dmx-handle.o(.data)
     count                                    0x2000001c   Data           1  dmx-handle.o(.data)
     .data                                    0x20000020   Section        4  dmx-it.o(.data)
     c                                        0x20000020   Data           4  dmx-it.o(.data)
@@ -2388,16 +2388,16 @@ Image Symbol Table
     .data                                    0x200001b0   Section        4  mvars.o(.data)
     .data                                    0x200001b4   Section        4  errno.o(.data)
     _errno                                   0x200001b4   Data           4  errno.o(.data)
-    .bss                                     0x200001b8   Section     6262  dmx-handle.o(.bss)
-    arr                                      0x20001a1e   Data          16  dmx-handle.o(.bss)
-    .bss                                     0x20001a2e   Section      513  dmx-init.o(.bss)
-    .bss                                     0x20001c30   Section      704  main.o(.bss)
-    .bss                                     0x20001ef0   Section      548  usb_device.o(.bss)
-    .bss                                     0x20002114   Section      952  usbd_conf.o(.bss)
-    .bss                                     0x200024cc   Section      512  usbd_desc.o(.bss)
-    .bss                                     0x200026cc   Section     4096  usbd_cdc_if.o(.bss)
-    HEAP                                     0x200036d0   Section     8192  startup_stm32f407xx.o(HEAP)
-    STACK                                    0x200056d0   Section    16384  startup_stm32f407xx.o(STACK)
+    .bss                                     0x200001b8   Section     8394  dmx-handle.o(.bss)
+    arr                                      0x20002262   Data          32  dmx-handle.o(.bss)
+    .bss                                     0x20002282   Section      513  dmx-init.o(.bss)
+    .bss                                     0x20002484   Section      704  main.o(.bss)
+    .bss                                     0x20002744   Section      548  usb_device.o(.bss)
+    .bss                                     0x20002968   Section      952  usbd_conf.o(.bss)
+    .bss                                     0x20002d20   Section      512  usbd_desc.o(.bss)
+    .bss                                     0x20002f20   Section     4096  usbd_cdc_if.o(.bss)
+    HEAP                                     0x20003f20   Section     8192  startup_stm32f407xx.o(HEAP)
+    STACK                                    0x20005f20   Section    16384  startup_stm32f407xx.o(STACK)
 
     Global Symbols
 
@@ -2783,36 +2783,36 @@ Image Symbol Table
     __scatterload_zeroinit                   0x08006999   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
     checknum                                 0x08006b07   Thumb Code    50  keypad.o(i.checknum)
     dmx_add_group                            0x08006b39   Thumb Code   172  dmx-handle.o(i.dmx_add_group)
-    dmx_add_scanner                          0x08006c2d   Thumb Code   160  dmx-handle.o(i.dmx_add_scanner)
-    dmx_add_scene                            0x08006cd5   Thumb Code    98  dmx-handle.o(i.dmx_add_scene)
-    dmx_add_set                              0x08006d5d   Thumb Code    94  dmx-handle.o(i.dmx_add_set)
-    dmx_auto_play                            0x08006dd9   Thumb Code   102  dmx-handle.o(i.dmx_auto_play)
-    dmx_getstring                            0x08006e55   Thumb Code   194  dmx-handle.o(i.dmx_getstring)
-    dmx_main                                 0x08006f25   Thumb Code   126  dmx-handle.o(i.dmx_main)
-    dmx_out_scanner                          0x08006fe5   Thumb Code    42  dmx-handle.o(i.dmx_out_scanner)
-    dmx_out_scene                            0x08007015   Thumb Code    32  dmx-handle.o(i.dmx_out_scene)
-    dmx_out_set                              0x08007035   Thumb Code   104  dmx-handle.o(i.dmx_out_set)
-    dmx_select_mode                          0x080070a9   Thumb Code   164  dmx-handle.o(i.dmx_select_mode)
-    dmx_select_set                           0x08007199   Thumb Code   106  dmx-handle.o(i.dmx_select_set)
-    free                                     0x08007241   Thumb Code    76  malloc.o(i.free)
-    lcd_clear                                0x08007291   Thumb Code    16  lcd.o(i.lcd_clear)
-    lcd_command                              0x080072a1   Thumb Code    14  lcd.o(i.lcd_command)
-    lcd_display                              0x080072b1   Thumb Code    26  lcd.o(i.lcd_display)
-    lcd_expanderWrite                        0x080072d1   Thumb Code    38  lcd.o(i.lcd_expanderWrite)
-    lcd_home                                 0x080072fd   Thumb Code    26  lcd.o(i.lcd_home)
-    lcd_init                                 0x08007321   Thumb Code   140  lcd.o(i.lcd_init)
-    lcd_pulseEnable                          0x080073bd   Thumb Code    34  lcd.o(i.lcd_pulseEnable)
-    lcd_send                                 0x080073df   Thumb Code    38  lcd.o(i.lcd_send)
-    lcd_setCursor                            0x08007405   Thumb Code    56  lcd.o(i.lcd_setCursor)
-    lcd_write                                0x0800744d   Thumb Code    56  lcd.o(i.lcd_write)
-    lcd_write4bits                           0x0800748d   Thumb Code    18  lcd.o(i.lcd_write4bits)
-    lcd_write_string                         0x0800749f   Thumb Code    32  lcd.o(i.lcd_write_string)
-    main                                     0x080074c1   Thumb Code   198  main.o(i.main)
-    malloc                                   0x080075a5   Thumb Code    92  malloc.o(i.malloc)
-    APBAHBPrescTable                         0x08007628   Data          16  stm32f4xx_hal_rcc.o(.constdata)
-    __ctype_table                            0x08007638   Data         129  ctype_o.o(.constdata)
-    Region$$Table$$Base                      0x080076c0   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x080076e0   Number         0  anon$$obj.o(Region$$Table)
+    dmx_add_scanner                          0x08006c2d   Thumb Code   148  dmx-handle.o(i.dmx_add_scanner)
+    dmx_add_scene                            0x08006cc9   Thumb Code    98  dmx-handle.o(i.dmx_add_scene)
+    dmx_add_set                              0x08006d51   Thumb Code    92  dmx-handle.o(i.dmx_add_set)
+    dmx_auto_play                            0x08006dc9   Thumb Code   106  dmx-handle.o(i.dmx_auto_play)
+    dmx_getstring                            0x08006e49   Thumb Code   194  dmx-handle.o(i.dmx_getstring)
+    dmx_main                                 0x08006f19   Thumb Code   126  dmx-handle.o(i.dmx_main)
+    dmx_out_scanner                          0x08006fd9   Thumb Code    42  dmx-handle.o(i.dmx_out_scanner)
+    dmx_out_scene                            0x08007009   Thumb Code    28  dmx-handle.o(i.dmx_out_scene)
+    dmx_out_set                              0x08007025   Thumb Code   100  dmx-handle.o(i.dmx_out_set)
+    dmx_select_mode                          0x08007095   Thumb Code   164  dmx-handle.o(i.dmx_select_mode)
+    dmx_select_set                           0x08007185   Thumb Code   110  dmx-handle.o(i.dmx_select_set)
+    free                                     0x08007231   Thumb Code    76  malloc.o(i.free)
+    lcd_clear                                0x08007281   Thumb Code    16  lcd.o(i.lcd_clear)
+    lcd_command                              0x08007291   Thumb Code    14  lcd.o(i.lcd_command)
+    lcd_display                              0x080072a1   Thumb Code    26  lcd.o(i.lcd_display)
+    lcd_expanderWrite                        0x080072c1   Thumb Code    38  lcd.o(i.lcd_expanderWrite)
+    lcd_home                                 0x080072ed   Thumb Code    26  lcd.o(i.lcd_home)
+    lcd_init                                 0x08007311   Thumb Code   140  lcd.o(i.lcd_init)
+    lcd_pulseEnable                          0x080073ad   Thumb Code    34  lcd.o(i.lcd_pulseEnable)
+    lcd_send                                 0x080073cf   Thumb Code    38  lcd.o(i.lcd_send)
+    lcd_setCursor                            0x080073f5   Thumb Code    56  lcd.o(i.lcd_setCursor)
+    lcd_write                                0x0800743d   Thumb Code    56  lcd.o(i.lcd_write)
+    lcd_write4bits                           0x0800747d   Thumb Code    18  lcd.o(i.lcd_write4bits)
+    lcd_write_string                         0x0800748f   Thumb Code    32  lcd.o(i.lcd_write_string)
+    main                                     0x080074b1   Thumb Code   198  main.o(i.main)
+    malloc                                   0x08007595   Thumb Code    92  malloc.o(i.malloc)
+    APBAHBPrescTable                         0x08007618   Data          16  stm32f4xx_hal_rcc.o(.constdata)
+    __ctype_table                            0x08007628   Data         129  ctype_o.o(.constdata)
+    Region$$Table$$Base                      0x080076b0   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080076d0   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000000   Data           4  system_stm32f4xx.o(.data)
     v_state                                  0x20000005   Data           1  dmx-handle.o(.data)
     button                                   0x20000006   Data           1  dmx-handle.o(.data)
@@ -2821,7 +2821,7 @@ Image Symbol Table
     set_len                                  0x20000009   Data           1  dmx-handle.o(.data)
     scene_cur                                0x2000000c   Data           4  dmx-handle.o(.data)
     arr_cur                                  0x20000010   Data           4  dmx-handle.o(.data)
-    len_cur                                  0x20000014   Data           1  dmx-handle.o(.data)
+    len_cur                                  0x20000014   Data           2  dmx-handle.o(.data)
     scene_current                            0x20000018   Data           4  dmx-handle.o(.data)
     _displayFunction                         0x20000024   Data           1  lcd.o(.data)
     _numLines                                0x20000025   Data           1  lcd.o(.data)
@@ -2854,28 +2854,28 @@ Image Symbol Table
     __microlib_freelist                      0x200001ac   Data           4  mvars.o(.data)
     __microlib_freelist_initialised          0x200001b0   Data           4  mvars.o(.data)
     v_display_buffer                         0x200001b8   Data          34  dmx-handle.o(.bss)
-    set                                      0x200001da   Data        6212  dmx-handle.o(.bss)
-    dmxData                                  0x20001a2e   Data         513  dmx-init.o(.bss)
-    dataReceive                              0x20001c30   Data          15  main.o(.bss)
-    databluetooth                            0x20001c3f   Data          15  main.o(.bss)
-    htim2                                    0x20001c50   Data          60  main.o(.bss)
-    htim3                                    0x20001c8c   Data          60  main.o(.bss)
-    hi2c1                                    0x20001cc8   Data          68  main.o(.bss)
-    huart2                                   0x20001d0c   Data          64  main.o(.bss)
-    huart_dmx                                0x20001d4c   Data          64  main.o(.bss)
-    hdma_adc1                                0x20001d8c   Data          88  main.o(.bss)
-    hdma_uart                                0x20001de4   Data          88  main.o(.bss)
-    hdma_bluetooth                           0x20001e3c   Data          88  main.o(.bss)
-    hadc1                                    0x20001e94   Data          72  main.o(.bss)
-    adcbuf                                   0x20001edc   Data          20  main.o(.bss)
-    hUsbDeviceFS                             0x20001ef0   Data         548  usb_device.o(.bss)
-    hpcd_USB_OTG_FS                          0x20002114   Data         952  usbd_conf.o(.bss)
-    USBD_StrDesc                             0x200024cc   Data         512  usbd_desc.o(.bss)
-    UserRxBufferFS                           0x200026cc   Data        2048  usbd_cdc_if.o(.bss)
-    UserTxBufferFS                           0x20002ecc   Data        2048  usbd_cdc_if.o(.bss)
-    __heap_base                              0x200036d0   Data           0  startup_stm32f407xx.o(HEAP)
-    __heap_limit                             0x200056d0   Data           0  startup_stm32f407xx.o(HEAP)
-    __initial_sp                             0x200096d0   Data           0  startup_stm32f407xx.o(STACK)
+    set                                      0x200001da   Data        8328  dmx-handle.o(.bss)
+    dmxData                                  0x20002282   Data         513  dmx-init.o(.bss)
+    dataReceive                              0x20002484   Data          15  main.o(.bss)
+    databluetooth                            0x20002493   Data          15  main.o(.bss)
+    htim2                                    0x200024a4   Data          60  main.o(.bss)
+    htim3                                    0x200024e0   Data          60  main.o(.bss)
+    hi2c1                                    0x2000251c   Data          68  main.o(.bss)
+    huart2                                   0x20002560   Data          64  main.o(.bss)
+    huart_dmx                                0x200025a0   Data          64  main.o(.bss)
+    hdma_adc1                                0x200025e0   Data          88  main.o(.bss)
+    hdma_uart                                0x20002638   Data          88  main.o(.bss)
+    hdma_bluetooth                           0x20002690   Data          88  main.o(.bss)
+    hadc1                                    0x200026e8   Data          72  main.o(.bss)
+    adcbuf                                   0x20002730   Data          20  main.o(.bss)
+    hUsbDeviceFS                             0x20002744   Data         548  usb_device.o(.bss)
+    hpcd_USB_OTG_FS                          0x20002968   Data         952  usbd_conf.o(.bss)
+    USBD_StrDesc                             0x20002d20   Data         512  usbd_desc.o(.bss)
+    UserRxBufferFS                           0x20002f20   Data        2048  usbd_cdc_if.o(.bss)
+    UserTxBufferFS                           0x20003720   Data        2048  usbd_cdc_if.o(.bss)
+    __heap_base                              0x20003f20   Data           0  startup_stm32f407xx.o(HEAP)
+    __heap_limit                             0x20005f20   Data           0  startup_stm32f407xx.o(HEAP)
+    __initial_sp                             0x20009f20   Data           0  startup_stm32f407xx.o(STACK)
 
 
 
@@ -2885,9 +2885,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000189
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00007898, Max: 0x00100000, ABSOLUTE, COMPRESSED[0x000077a0])
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00007888, Max: 0x00100000, ABSOLUTE, COMPRESSED[0x00007790])
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000076e0, Max: 0x00100000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000076d0, Max: 0x00100000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3198,44 +3198,44 @@ Memory Map of the image
     0x08006afc   0x08006afc   0x0000000a   Code   RO         5052    i._sputc            mc_w.l(printf1.o)
     0x08006b06   0x08006b06   0x00000032   Code   RO          458    i.checknum          keypad.o
     0x08006b38   0x08006b38   0x000000f4   Code   RO          165    i.dmx_add_group     dmx-handle.o
-    0x08006c2c   0x08006c2c   0x000000a8   Code   RO          166    i.dmx_add_scanner   dmx-handle.o
-    0x08006cd4   0x08006cd4   0x00000088   Code   RO          167    i.dmx_add_scene     dmx-handle.o
-    0x08006d5c   0x08006d5c   0x0000007c   Code   RO          168    i.dmx_add_set       dmx-handle.o
-    0x08006dd8   0x08006dd8   0x0000007c   Code   RO          169    i.dmx_auto_play     dmx-handle.o
-    0x08006e54   0x08006e54   0x000000d0   Code   RO          170    i.dmx_getstring     dmx-handle.o
-    0x08006f24   0x08006f24   0x000000c0   Code   RO          171    i.dmx_main          dmx-handle.o
-    0x08006fe4   0x08006fe4   0x00000030   Code   RO          172    i.dmx_out_scanner   dmx-handle.o
-    0x08007014   0x08007014   0x00000020   Code   RO          173    i.dmx_out_scene     dmx-handle.o
-    0x08007034   0x08007034   0x00000074   Code   RO          174    i.dmx_out_set       dmx-handle.o
-    0x080070a8   0x080070a8   0x000000f0   Code   RO          176    i.dmx_select_mode   dmx-handle.o
-    0x08007198   0x08007198   0x000000a8   Code   RO          177    i.dmx_select_set    dmx-handle.o
-    0x08007240   0x08007240   0x00000050   Code   RO         5259    i.free              mc_w.l(malloc.o)
-    0x08007290   0x08007290   0x00000010   Code   RO          585    i.lcd_clear         lcd.o
-    0x080072a0   0x080072a0   0x0000000e   Code   RO          586    i.lcd_command       lcd.o
-    0x080072ae   0x080072ae   0x00000002   PAD
-    0x080072b0   0x080072b0   0x00000020   Code   RO          587    i.lcd_display       lcd.o
-    0x080072d0   0x080072d0   0x0000002c   Code   RO          588    i.lcd_expanderWrite  lcd.o
-    0x080072fc   0x080072fc   0x00000024   Code   RO          589    i.lcd_home          lcd.o
-    0x08007320   0x08007320   0x0000009c   Code   RO          590    i.lcd_init          lcd.o
-    0x080073bc   0x080073bc   0x00000022   Code   RO          591    i.lcd_pulseEnable   lcd.o
-    0x080073de   0x080073de   0x00000026   Code   RO          592    i.lcd_send          lcd.o
-    0x08007404   0x08007404   0x00000048   Code   RO          593    i.lcd_setCursor     lcd.o
-    0x0800744c   0x0800744c   0x00000040   Code   RO          594    i.lcd_write         lcd.o
-    0x0800748c   0x0800748c   0x00000012   Code   RO          595    i.lcd_write4bits    lcd.o
-    0x0800749e   0x0800749e   0x00000020   Code   RO          596    i.lcd_write_string  lcd.o
-    0x080074be   0x080074be   0x00000002   PAD
-    0x080074c0   0x080074c0   0x000000e4   Code   RO          680    i.main              main.o
-    0x080075a4   0x080075a4   0x0000006c   Code   RO         5260    i.malloc            mc_w.l(malloc.o)
-    0x08007610   0x08007610   0x00000010   Data   RO          597    .constdata          lcd.o
-    0x08007620   0x08007620   0x00000008   Data   RO         2149    .constdata          stm32f4xx_hal_dma.o
-    0x08007628   0x08007628   0x00000010   Data   RO         2235    .constdata          stm32f4xx_hal_rcc.o
-    0x08007638   0x08007638   0x00000081   Data   RO         5342    .constdata          mc_w.l(ctype_o.o)
-    0x080076b9   0x080076b9   0x00000003   PAD
-    0x080076bc   0x080076bc   0x00000004   Data   RO         5343    .constdata          mc_w.l(ctype_o.o)
-    0x080076c0   0x080076c0   0x00000020   Data   RO         5376    Region$$Table       anon$$obj.o
+    0x08006c2c   0x08006c2c   0x0000009c   Code   RO          166    i.dmx_add_scanner   dmx-handle.o
+    0x08006cc8   0x08006cc8   0x00000088   Code   RO          167    i.dmx_add_scene     dmx-handle.o
+    0x08006d50   0x08006d50   0x00000078   Code   RO          168    i.dmx_add_set       dmx-handle.o
+    0x08006dc8   0x08006dc8   0x00000080   Code   RO          169    i.dmx_auto_play     dmx-handle.o
+    0x08006e48   0x08006e48   0x000000d0   Code   RO          170    i.dmx_getstring     dmx-handle.o
+    0x08006f18   0x08006f18   0x000000c0   Code   RO          171    i.dmx_main          dmx-handle.o
+    0x08006fd8   0x08006fd8   0x00000030   Code   RO          172    i.dmx_out_scanner   dmx-handle.o
+    0x08007008   0x08007008   0x0000001c   Code   RO          173    i.dmx_out_scene     dmx-handle.o
+    0x08007024   0x08007024   0x00000070   Code   RO          174    i.dmx_out_set       dmx-handle.o
+    0x08007094   0x08007094   0x000000f0   Code   RO          176    i.dmx_select_mode   dmx-handle.o
+    0x08007184   0x08007184   0x000000ac   Code   RO          177    i.dmx_select_set    dmx-handle.o
+    0x08007230   0x08007230   0x00000050   Code   RO         5259    i.free              mc_w.l(malloc.o)
+    0x08007280   0x08007280   0x00000010   Code   RO          585    i.lcd_clear         lcd.o
+    0x08007290   0x08007290   0x0000000e   Code   RO          586    i.lcd_command       lcd.o
+    0x0800729e   0x0800729e   0x00000002   PAD
+    0x080072a0   0x080072a0   0x00000020   Code   RO          587    i.lcd_display       lcd.o
+    0x080072c0   0x080072c0   0x0000002c   Code   RO          588    i.lcd_expanderWrite  lcd.o
+    0x080072ec   0x080072ec   0x00000024   Code   RO          589    i.lcd_home          lcd.o
+    0x08007310   0x08007310   0x0000009c   Code   RO          590    i.lcd_init          lcd.o
+    0x080073ac   0x080073ac   0x00000022   Code   RO          591    i.lcd_pulseEnable   lcd.o
+    0x080073ce   0x080073ce   0x00000026   Code   RO          592    i.lcd_send          lcd.o
+    0x080073f4   0x080073f4   0x00000048   Code   RO          593    i.lcd_setCursor     lcd.o
+    0x0800743c   0x0800743c   0x00000040   Code   RO          594    i.lcd_write         lcd.o
+    0x0800747c   0x0800747c   0x00000012   Code   RO          595    i.lcd_write4bits    lcd.o
+    0x0800748e   0x0800748e   0x00000020   Code   RO          596    i.lcd_write_string  lcd.o
+    0x080074ae   0x080074ae   0x00000002   PAD
+    0x080074b0   0x080074b0   0x000000e4   Code   RO          680    i.main              main.o
+    0x08007594   0x08007594   0x0000006c   Code   RO         5260    i.malloc            mc_w.l(malloc.o)
+    0x08007600   0x08007600   0x00000010   Data   RO          597    .constdata          lcd.o
+    0x08007610   0x08007610   0x00000008   Data   RO         2149    .constdata          stm32f4xx_hal_dma.o
+    0x08007618   0x08007618   0x00000010   Data   RO         2235    .constdata          stm32f4xx_hal_rcc.o
+    0x08007628   0x08007628   0x00000081   Data   RO         5342    .constdata          mc_w.l(ctype_o.o)
+    0x080076a9   0x080076a9   0x00000003   PAD
+    0x080076ac   0x080076ac   0x00000004   Data   RO         5343    .constdata          mc_w.l(ctype_o.o)
+    0x080076b0   0x080076b0   0x00000020   Data   RO         5376    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080076e0, Size: 0x000096d0, Max: 0x00020000, ABSOLUTE, COMPRESSED[0x000000c0])
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080076d0, Size: 0x00009f20, Max: 0x00020000, ABSOLUTE, COMPRESSED[0x000000c0])
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3256,17 +3256,16 @@ Memory Map of the image
     0x200001ac   COMPRESSED   0x00000004   Data   RW         5310    .data               mc_w.l(mvars.o)
     0x200001b0   COMPRESSED   0x00000004   Data   RW         5311    .data               mc_w.l(mvars.o)
     0x200001b4   COMPRESSED   0x00000004   Data   RW         5315    .data               mc_w.l(errno.o)
-    0x200001b8        -       0x00001876   Zero   RW          178    .bss                dmx-handle.o
-    0x20001a2e        -       0x00000201   Zero   RW          355    .bss                dmx-init.o
-    0x20001c2f   COMPRESSED   0x00000001   PAD
-    0x20001c30        -       0x000002c0   Zero   RW          681    .bss                main.o
-    0x20001ef0        -       0x00000224   Zero   RW          873    .bss                usb_device.o
-    0x20002114        -       0x000003b8   Zero   RW         1039    .bss                usbd_conf.o
-    0x200024cc        -       0x00000200   Zero   RW         1440    .bss                usbd_desc.o
-    0x200026cc        -       0x00001000   Zero   RW         1565    .bss                usbd_cdc_if.o
-    0x200036cc   COMPRESSED   0x00000004   PAD
-    0x200036d0        -       0x00002000   Zero   RW          152    HEAP                startup_stm32f407xx.o
-    0x200056d0        -       0x00004000   Zero   RW          151    STACK               startup_stm32f407xx.o
+    0x200001b8        -       0x000020ca   Zero   RW          178    .bss                dmx-handle.o
+    0x20002282        -       0x00000201   Zero   RW          355    .bss                dmx-init.o
+    0x20002483   COMPRESSED   0x00000001   PAD
+    0x20002484        -       0x000002c0   Zero   RW          681    .bss                main.o
+    0x20002744        -       0x00000224   Zero   RW          873    .bss                usb_device.o
+    0x20002968        -       0x000003b8   Zero   RW         1039    .bss                usbd_conf.o
+    0x20002d20        -       0x00000200   Zero   RW         1440    .bss                usbd_desc.o
+    0x20002f20        -       0x00001000   Zero   RW         1565    .bss                usbd_cdc_if.o
+    0x20003f20        -       0x00002000   Zero   RW          152    HEAP                startup_stm32f407xx.o
+    0x20005f20        -       0x00004000   Zero   RW          151    STACK               startup_stm32f407xx.o
 
 
 ==============================================================================
@@ -3276,7 +3275,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      1824        412          0         25       6262      11603   dmx-handle.o
+      1808        410          0         25       8394      11607   dmx-handle.o
       1948        190          0          0        513      11015   dmx-init.o
        636         92          0          4          0       3438   dmx-it.o
        814         48          0          0          0       5328   keypad.o
@@ -3310,9 +3309,9 @@ Image component sizes
        174          0          0          0          0       4208   usbd_ioreq.o
 
     ----------------------------------------------------------------------
-     28610       1670        464        428      38168     659062   Object Totals
+     28594       1668        464        428      40296     659066   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        44          0          0         11          5          0   (incl. Padding)
+        44          0          0         11          1          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -3363,15 +3362,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     29832       1724        600        440      38168     632442   Grand Totals
-     29832       1724        600        192      38168     632442   ELF Image Totals (compressed)
-     29832       1724        600        192          0          0   ROM Totals
+     29816       1722        600        440      40296     632446   Grand Totals
+     29816       1722        600        192      40296     632446   ELF Image Totals (compressed)
+     29816       1722        600        192          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                30432 (  29.72kB)
-    Total RW  Size (RW Data + ZI Data)             38608 (  37.70kB)
-    Total ROM Size (Code + RO Data + RW Data)      30624 (  29.91kB)
+    Total RO  Size (Code + RO Data)                30416 (  29.70kB)
+    Total RW  Size (RW Data + ZI Data)             40736 (  39.78kB)
+    Total ROM Size (Code + RO Data + RW Data)      30608 (  29.89kB)
 
 ==============================================================================
 

@@ -29,7 +29,7 @@ static volatile int TIM4_ovf_val = 0;
 static volatile int dmx_timeout_val = 0;
 static volatile uint8_t phase = WAITING;
 static volatile uint32_t break_time, mab_time = 0;
-static uint8_t start_addr;
+static uint16_t start_addr;
 
 
 void dmx512_set_input(int i, uint8_t value);

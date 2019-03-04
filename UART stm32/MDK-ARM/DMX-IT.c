@@ -1,7 +1,7 @@
 #include "stm32f4xx_hal.h"
 //#include "DMX-Init.h"
 #include "DMX-handle.h"
-extern uint8_t databluetooth[6];
+extern uint8_t databluetooth[15];
 extern volatile uint8_t dmxData[DMX_CHANNELS+1];
 extern uint32_t adcbuf[DMX_NUMBER_ADC];
 //extern uint8_t scanner_select[_M_ScannerNum];
@@ -12,8 +12,8 @@ extern TIM_HandleTypeDef htim2,htim3;
 extern UART_HandleTypeDef huart_dmx,huart2;
 extern volatile uint8_t dmxSendState;
 extern SCENE *scene_cur;
-extern uint8_t *arr_cur;
-extern uint8_t len_cur;
+extern uint16_t *arr_cur;
+extern uint16_t len_cur;
 extern uint8_t v_state;
 //extern uint8_t flag_timer2;
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc)

@@ -18,8 +18,8 @@ uint8_t element_arr_scene=0;
 uint8_t set_len=0;
 //SCENE scene_select[DMX_NUMBER_SCENE];
 SCENE *scene_cur=NULL;
-uint8_t *arr_cur=NULL;
-uint8_t len_cur=0;
+uint16_t *arr_cur=NULL;
+uint16_t len_cur=0;
 //volatile uint8_t flag_timer2=1;
 //static uint8_t out_set_cur=0;
 static uint8_t out_scene_cur=0;
@@ -189,7 +189,7 @@ void dmx_add_scene(SCENE *scene)
 	for(int i=0;i<group;i++)
 	{
 		char temp[32]="";
-		static uint8_t arr[16]="";
+		static uint16_t arr[16]={0};
 		memset(dmxData,0,DMX_CHANNELS);
 		lcd_clear();
 		lcd_home();
@@ -199,10 +199,10 @@ void dmx_add_scene(SCENE *scene)
 	}
 	
 }
-void dmx_add_group(SCENE *scene,uint8_t *arr)
+void dmx_add_group(SCENE *scene,uint16_t *arr)
 {
 	char temp[32]="";
-	uint8_t num=0,len=0;
+	uint16_t num=0,len=0;
 	char tmp1[5]="";
 	dmx_getstring(tmp1,GET_NUM);
 	len=atoi(tmp1);
@@ -231,7 +231,7 @@ void dmx_add_group(SCENE *scene,uint8_t *arr)
 	HAL_ADC_Stop_DMA(&hadc1);
 }
 
-void dmx_scan_color(SCENE *scene,uint8_t *arr,uint8_t len)
+void dmx_scan_color(SCENE *scene,uint16_t *arr,uint16_t len)
 {
 	
 	for(int i=0;i<len;i++)
@@ -246,9 +246,9 @@ void dmx_scan_color(SCENE *scene,uint8_t *arr,uint8_t len)
 		}
 	}
 }
-void dmx_add_scanner(SCENE *scene,uint8_t *arr,uint8_t len)
+void dmx_add_scanner(SCENE *scene,uint16_t *arr,uint16_t len)
 {
-	uint8_t temp =0;
+	uint16_t temp =0;
 	for(int i=0;i<len;i++)
 	{
 		temp=scene->len-len+i;

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Wed Jan 16 09:20:28 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Jan 24 06:33:58 2019
 <BR><P>
 <H3>Maximum Stack Usage =        456 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2232,7 +2232,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_add_scene
 </UL>
 
-<P><STRONG><a name="[99]"></a>dmx_add_scanner</STRONG> (Thumb, 160 bytes, Stack size 20 bytes, dmx-handle.o(i.dmx_add_scanner))
+<P><STRONG><a name="[99]"></a>dmx_add_scanner</STRONG> (Thumb, 148 bytes, Stack size 20 bytes, dmx-handle.o(i.dmx_add_scanner))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = dmx_add_scanner
 </UL>
 <BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_ConvHalfCpltCallback
@@ -2254,7 +2254,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_add_set
 </UL>
 
-<P><STRONG><a name="[171]"></a>dmx_add_set</STRONG> (Thumb, 94 bytes, Stack size 56 bytes, dmx-handle.o(i.dmx_add_set))
+<P><STRONG><a name="[171]"></a>dmx_add_set</STRONG> (Thumb, 92 bytes, Stack size 56 bytes, dmx-handle.o(i.dmx_add_set))
 <BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = dmx_add_set &rArr; dmx_add_scene &rArr; dmx_add_group &rArr; dmx_getstring &rArr; lcd_write &rArr; lcd_setCursor &rArr; lcd_command &rArr; lcd_send &rArr; lcd_write4bits &rArr; lcd_pulseEnable &rArr; lcd_expanderWrite &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_write_string
@@ -2269,7 +2269,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[177]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_select_set
 </UL>
 
-<P><STRONG><a name="[10e]"></a>dmx_auto_play</STRONG> (Thumb, 102 bytes, Stack size 8 bytes, dmx-handle.o(i.dmx_auto_play))
+<P><STRONG><a name="[10e]"></a>dmx_auto_play</STRONG> (Thumb, 106 bytes, Stack size 8 bytes, dmx-handle.o(i.dmx_auto_play))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = dmx_auto_play &rArr; dmx_out_set &rArr; dmx_out_scene
 </UL>
 <BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_out_set
@@ -2313,7 +2313,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_out_scene
 </UL>
 
-<P><STRONG><a name="[178]"></a>dmx_out_scene</STRONG> (Thumb, 32 bytes, Stack size 12 bytes, dmx-handle.o(i.dmx_out_scene))
+<P><STRONG><a name="[178]"></a>dmx_out_scene</STRONG> (Thumb, 28 bytes, Stack size 12 bytes, dmx-handle.o(i.dmx_out_scene))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = dmx_out_scene
 </UL>
 <BR>[Calls]<UL><LI><a href="#[179]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_out_scanner
@@ -2321,7 +2321,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_out_set
 </UL>
 
-<P><STRONG><a name="[172]"></a>dmx_out_set</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, dmx-handle.o(i.dmx_out_set))
+<P><STRONG><a name="[172]"></a>dmx_out_set</STRONG> (Thumb, 100 bytes, Stack size 8 bytes, dmx-handle.o(i.dmx_out_set))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = dmx_out_set &rArr; dmx_out_scene
 </UL>
 <BR>[Calls]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dmx_out_scene
@@ -2342,7 +2342,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[177]"></a>dmx_select_set</STRONG> (Thumb, 106 bytes, Stack size 48 bytes, dmx-handle.o(i.dmx_select_set))
+<P><STRONG><a name="[177]"></a>dmx_select_set</STRONG> (Thumb, 110 bytes, Stack size 48 bytes, dmx-handle.o(i.dmx_select_set))
 <BR><BR>[Stack]<UL><LI>Max Depth = 456<LI>Call Chain = dmx_select_set &rArr; dmx_add_set &rArr; dmx_add_scene &rArr; dmx_add_group &rArr; dmx_getstring &rArr; lcd_write &rArr; lcd_setCursor &rArr; lcd_command &rArr; lcd_send &rArr; lcd_write4bits &rArr; lcd_pulseEnable &rArr; lcd_expanderWrite &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcd_write_string

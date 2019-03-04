@@ -64,7 +64,7 @@ typedef enum
 
 typedef struct SCANNER
 {
-	uint8_t Addr;
+	uint16_t Addr;
 	uint8_t red;
 	uint8_t green;
 	uint8_t blue;
